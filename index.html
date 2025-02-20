@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Website Header</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://kit.fontawesome.com/YOUR_FA_KIT.js" crossorigin="anonymous"></script>
+</head>
+<body>
+    <header class="navbar">
+        <div class="logo">W.</div>
+        <nav>
+            <ul class="nav-links">
+                <li><a href="#">Explore</a></li>
+                <li><a href="#">Events</a></li>
+                <li><a href="#">Colleges</a></li>
+                <li><a href="#">Departments</a></li>
+                <li><a href="#">Workshops</a></li>
+            </ul>
+        </nav>
+        <div class="search-container">
+            <input type="text" placeholder="Search for College Events" id="search-box">
+            <button id="search-btn"><i class="fas fa-search"></i></button>
+        </div>
+        <div class="auth-buttons">
+            <a href="#">Log in</a>
+            <a href="#">Sign Up</a>
+            <button class="btn-pro">Create Event</button>
+        </div>
+    </header>
+
+    <script>
+        document.getElementById("search-btn").addEventListener("click", function() {
+            alert("Search functionality coming soon!");
+        });
+    </script>
+</body>
+</html>
