@@ -92,9 +92,10 @@ body {
 }
 
 .date {
-    background: white;
+    background:#e6e1ce;
     padding: 5px 10px;
     border-radius: 5px;
+    border-color:#1f2325;
     font-weight: bold;
 }
 
@@ -137,5 +138,121 @@ body {
         align-items: flex-start;
         gap: 10px;
         margin-top: 10px;
+    }
+}
+
+.hero2 {
+    padding: 80px 20px;
+    background-color: white;
+}
+
+.upcoming {
+    font-size: 16px;
+    color: #333;
+}
+
+.title {
+    font-size:130px;
+    font-weight: bold;
+    margin: 10px 0;
+}
+
+.feature-section {
+    max-width:none;
+    margin: auto;
+    padding: 60px 20px;
+    padding-left: 60px;
+    padding-right: 60px;
+    text-align: center;
+    background-color: white;
+}
+
+.feature-heading {
+    font-size: 2rem;
+    font-weight: bold;
+    text-align: left;
+    margin-bottom: 20px;
+}
+
+/* Feature Grid */
+.feature-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+}
+
+/* Feature Card */
+.feature-card {
+    background-color: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+}
+
+.feature-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* Feature Image */
+.feature-card img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* Feature Details */
+.feature-details {
+    padding: 15px;
+    text-align: left;
+}
+
+.feature-title {
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.feature-author {
+    font-size: 0.9rem;
+    color: gray;
+}
+
+.feature-text {
+    font-size: 0.85rem;
+    color: #333;
+    margin-top: 5px;
+}
+
+/* View More Link */
+.view-more {
+    margin-top: 30px;
+}
+
+.view-more a {
+    text-decoration: none;
+    font-size: 1rem;
+    font-weight: bold;
+    color: #000000;
+    transition: color 0.3s ease;
+}
+
+.view-more a:hover {
+    text-decoration: underline;
+    color: #000000;
+}
+
+/* Responsive Design */
+@media (max-width: 900px) {
+    .feature-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 600px) {
+    .feature-grid {
+        grid-template-columns: repeat(1, 1fr);
     }
 }
