@@ -30,10 +30,24 @@
         </div>
     </header>
 
+    <section class="hero">
+        <p class="upcoming">Upcoming event <span class="date" id="current-date"></span></p>
+        <h1 class="title">TECH FEST</h1>
+    </section>
+
+    <section class="image-section">
+        <img src="https://i.ibb.co/R40XmTHp/Screenshot-20-2-2025-215358-www-instagram-com.jpg" alt="Featured Image" class="featured-image">
+    </section>
+
     <script>
         document.getElementById("search-btn").addEventListener("click", function() {
             alert("Search functionality coming soon!");
         });
+
+        document.getElementById("current-date").innerText = new Date().toLocaleDateString('en-US', {
+            month: 'short', day: '2-digit', year: 'numeric'
+        });
+
     </script>
 </body>
 </html>

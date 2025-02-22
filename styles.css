@@ -3,6 +3,7 @@ body {
     background-color: #e6e1ce; 
     margin: 0;
     padding: 0;
+    text-align: center;
 }
 
 .navbar {
@@ -80,6 +81,42 @@ body {
     cursor: pointer;
     font-size: 16px;
 }
+
+.hero {
+    padding: 40px 20px;
+}
+
+.upcoming {
+    font-size: 16px;
+    color: #333;
+}
+
+.date {
+    background: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-weight: bold;
+}
+
+.title {
+    font-size:130px;
+    font-weight: bold;
+    margin: 10px 0;
+}
+
+.image-section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 40px 0;
+}
+
+.featured-image {
+    width: 98.5%;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
 
 @media (max-width: 768px) {
     .navbar {
