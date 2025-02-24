@@ -110,13 +110,37 @@ body {
     justify-content: center;
     align-items: center;
     padding: 40px 0;
+    position: relative; /* Allows positioning child elements */
 }
 
 .featured-image {
     width: 98.5%;
+    max-width: 1200px;
+    height: auto;
+    border-radius: 10px;
+    filter: blur(15px); /* Blurred background */
+    position: absolute;
+    z-index: -1; /* Sends it to the back */
+}
+
+.image-container {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 300px; /* Adjust as needed */
+    height: 300px;
+    background-color: white;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
+
+.mini-image {
+    width: 90%;
+    height: auto;
+    border-radius: 5px;
+}
+
 
 
 @media (max-width: 768px) {
@@ -142,7 +166,7 @@ body {
 }
 
 .hero2 {
-    padding: 80px 20px;
+    padding: 40px 20px;
     background-color: white;
 }
 
@@ -158,20 +182,13 @@ body {
 }
 
 .feature-section {
-    max-width:none;
+    max-width: none;
     margin: auto;
     padding: 60px 20px;
-    padding-left: 60px;
-    padding-right: 60px;
+    padding-left: 50px;
+    padding-right: 50px;
     text-align: center;
     background-color: white;
-}
-
-.feature-heading {
-    font-size: 2rem;
-    font-weight: bold;
-    text-align: left;
-    margin-bottom: 20px;
 }
 
 /* Feature Grid */
@@ -181,8 +198,15 @@ body {
     gap: 20px;
 }
 
+/* Feature Container */
+.feature-container {
+    position: relative;
+    width: 100%;
+}
+
 /* Feature Card */
 .feature-card {
+    position: relative;
     background-color: white;
     border-radius: 12px;
     overflow: hidden;
@@ -199,50 +223,110 @@ body {
 /* Feature Image */
 .feature-card img {
     width: 100%;
-    height: auto;
+    height: 340px;
+    object-fit: cover;
     display: block;
+    border-radius: 14px;
 }
 
-/* Feature Details */
+/* Hover Overlay */
+.feature-card::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0);
+    transition: background 0.3s ease;
+}
+
+.feature-card:hover::after {
+    background: rgba(0, 0, 0, 0.4); /* Black overlay with low transparency */
+}
+
+.feature-hover-text {
+    position: absolute;
+    bottom: 40px; 
+    left: 30px; 
+    color: white; 
+    font-size: 1.2rem;
+    font-weight: bold;
+    padding: 5px 10px;
+    border-radius: 5px;
+    z-index: 10; 
+    opacity: 0; 
+    transition: opacity 0.3s ease;
+}
+
+.feature-card:hover .feature-hover-text {
+    opacity: 1;
+}
+
+
+.feature-card:hover .feature-hover-text {
+    opacity: 1;
+}
+
+/* Feature Details - Always Visible Below */
 .feature-details {
-    padding: 15px;
-    text-align: left;
+    display: flex; /* Aligns items in a row */
+    justify-content: start; /* Aligns items to the left */
+    align-items: center; /* Centers items vertically */
+    gap: 30px; /* Adds 40px space between title and date */
+    padding: 9px;
+    background-color: white;
 }
 
 .feature-title {
     font-size: 1.2rem;
     font-weight: bold;
-    margin-bottom: 5px;
+    margin: 0; /* Removes default margin */
 }
 
-.feature-author {
-    font-size: 0.9rem;
-    color: gray;
-}
-
-.feature-text {
-    font-size: 0.85rem;
-    color: #333;
-    margin-top: 5px;
-}
-
-/* View More Link */
 .view-more {
     margin-top: 30px;
+    font-size: 1rem;
+    color: #222; /* Dark gray color */
+    display: flex;
+    justify-content: center; /* Centers content horizontally */
+    align-items: center;
+    text-align: center;
+    gap: 5px;
 }
 
-.view-more a {
-    text-decoration: none;
+/* Arrow styling */
+.arrow {
     font-size: 1rem;
+    margin: 0 5px;
+}
+
+/* Link Styling */
+.view-events {
     font-weight: bold;
-    color: #000000;
+    color: #000;
+    text-decoration: none;
+    position: relative;
     transition: color 0.3s ease;
 }
 
-.view-more a:hover {
-    text-decoration: underline;
-    color: #000000;
+/* Underline Animation on Hover */
+.view-events::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -2px;
+    width: 100%;
+    height: 2px;
+    background-color: rgba(0, 0, 0, 0.4); /* Light black */
+    transition: background-color 0.3s ease;
 }
+
+/* Hover Effect */
+.view-events:hover::after {
+    background-color: black; /* Dark black underline on hover */
+}
+
 
 /* Responsive Design */
 @media (max-width: 900px) {
