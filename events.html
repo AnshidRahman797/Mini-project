@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Website Header</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="styles2.css">
     <script src="https://kit.fontawesome.com/YOUR_FA_KIT.js" crossorigin="anonymous"></script>
 </head>
 <body>
@@ -30,26 +30,32 @@
         </div>
     </header>
 
-    <section class="hero">
-        <p class="upcoming">Upcoming event <span class="date" id="current-date"></span></p>
-        <h1 class="title">TECH FEST</h1>
-    </section>
-
-    <section class="image-section">
-        <img src="https://i.ibb.co/R40XmTHp/Screenshot-20-2-2025-215358-www-instagram-com.jpg" 
-             alt="Featured Image" class="featured-image">
-        
-        <div class="image-container">
-            <img src="https://i.ibb.co/R40XmTHp/Screenshot-20-2-2025-215358-www-instagram-com.jpg" 
-                 alt="Mini Image" class="mini-image">
+    <div class="filter-section">
+        <div class="filters">
+            <select class="dropdown-menu">
+                <option value="">Event Type</option>
+                <option value="best-design">Best Design</option>
+                <option value="top-innovation">Top Innovation</option>
+            </select>
+            <select class="dropdown-menu">
+                <option value="">College</option>
+                <option value="web-design">Web Design</option>
+                <option value="graphic-design">Graphic Design</option>
+            </select>
+            <select class="dropdown-menu">
+                <option value="">Department</option>
+                <option value="modern">Mode   rn</option>
+                <option value="minimal">Mini  mal</option>
+            </select>
+            <select class="dropdown-menu">
+                <option value="">Date</option>
+                <option value="html">HTML</option>
+                <option value="css">CSS</option>
+            </select>
         </div>
-    </section>
-    
-
-    <section class="hero2">
-        <p class="upcoming">Events</p>
-        <h1 class="title">FEATURED</h1>
-    </section>
+            <button class="reset-btn">Reset filters</button>
+        </div>
+    </div>
 
     <section class="feature-section">
         <div class="feature-grid">
@@ -126,28 +132,7 @@
         </div>
 
     </div>
+
     
-       <!-- View More Link -->
-<div class="view-more">
-    <p>Check out all events&nbsp;&nbsp;<span class="arrow">→</span> 
-        <a href="events.html" class="view-events">View Events</a>
-    </p>
-</div>
-
-    </section>    
-
-    <script>
-        document.getElementById("search-btn").addEventListener("click", function() {
-            alert("Search functionality coming soon!");
-        });
-
-        document.getElementById("current-date").innerText = new Date().toLocaleDateString('en-US', {
-            month: 'short', day: '2-digit', year: 'numeric'
-        });
-
-    </script>
 </body>
 </html>
-
-
-
