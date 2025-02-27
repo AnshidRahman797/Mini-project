@@ -8,27 +8,39 @@
     <script src="https://kit.fontawesome.com/YOUR_FA_KIT.js" crossorigin="anonymous"></script>
 </head>
 <body>
-    <header class="navbar">
+    <header class="navbar" id="home-navbar">
         <div class="logo">W.</div>
         <nav>
             <ul class="nav-links">
-                <li><a href="#">Explore</a></li>
-                <li><a href="#">Events</a></li>
+                <li><a href="#" id="explore-box">Explore</a></li>
+                <li><a href="#feature-events-section">Events</a></li>
                 <li><a href="#">Colleges</a></li>
                 <li><a href="#">Departments</a></li>
-                <li><a href="#">Workshops</a></li>
+                <li><a href="#feature-workshop-section">Workshops</a></li>
             </ul>
         </nav>
         <div class="search-container">
             <input type="text" placeholder="Search for College Events" id="search-box">
             <button id="search-btn"><i class="fas fa-search"></i></button>
         </div>
+
         <div class="auth-buttons">
             <a href="#">Log in</a>
             <a href="#">Sign Up</a>
             <button class="btn-pro">Create Event</button>
         </div>
     </header>
+
+    <section class="searchbar">
+        <div class="search-popup" id="searchPopup">
+            <div class="search-popup-content">
+                <div class="search-container-2">
+                    <input type="text" placeholder="Search for College Events">
+                    <button id="search-btn"><i class="fas fa-search"></i></button>
+                </div>
+            </div>
+        </div> 
+    </section>
 
     <section class="hero">
         <p class="upcoming">Upcoming event <span class="date" id="current-date"></span></p>
@@ -46,7 +58,7 @@
     </section>
     
 
-    <section class="hero2">
+    <section class="hero2" id="feature-events-section">
         <p class="upcoming">Events</p>
         <h1 class="title">FEATURED</h1>
     </section>
@@ -136,16 +148,197 @@
 
     </section>    
 
+    <section class="heading-section" id="feature-workshop-section">
+        <h1>Recent Workshops <br> on coming Days.</h1>
+    </section>
+
+    <section class="feature-section">
+        <div class="feature-grid">
+            <!-- Feature Card 1 -->
+            <div class="feature-container">
+                <div class="feature-card">
+                    <span class="feature-hover-text">Special Event</span>
+                    <img src="https://i.ibb.co/Ld7T3BHX/Whats-App-Image-2025-02-22-at-14-26-39-594e19db.jpg" alt="Feature 1">
+                </div>
+                <div class="feature-details">
+                    <h3 class="feature-title">GPL'25</h3>
+                    <p class="feature-author">on&nbsp;&nbsp;&nbsp;<strong>24th February</strong></p>
+                </div>
+            </div>
+    
+            <!-- Feature Card 2 -->
+            <div class="feature-container">
+                <div class="feature-card">
+                    <span class="feature-hover-text">Cricket Tournament</span>
+                    <img src="https://i.ibb.co/YH0nZ0V/Whats-App-Image-2025-02-22-at-14-26-42-531a91a9.jpg" alt="Feature 2">
+                </div>
+                <div class="feature-details">
+                    <h3 class="feature-title">Cricket Tour</h3>
+                    <p class="feature-author">on&nbsp;&nbsp;&nbsp;<strong>28th February</strong></p>
+                </div>
+            </div>
+
+        <!-- Feature Card 3 -->
+        <div class="feature-container">
+            <div class="feature-card">
+                <span class="feature-hover-text">MATRIX 2.0</span>
+                <img src="https://i.ibb.co/KcZWBLBC/Whats-App-Image-2025-02-22-at-14-32-16-f5a98472.jpg" alt="Feature 3">
+            </div>
+            <div class="feature-details">
+                <h3 class="feature-title">MATRIX 2.0</h3>
+                <p class="feature-author">on&nbsp;&nbsp;&nbsp;<strong>24-25 January</strong></p>
+            </div>
+        </div>
+
+        <!-- Feature Card 4 -->
+        <div class="feature-container">
+            <div class="feature-card">
+                <span class="feature-hover-text">EDEN 3.0</span>
+                <img src="https://i.ibb.co/r2766zYb/Whats-App-Image-2025-02-22-at-14-37-16-29efee74.jpg" alt="Feature 4">
+            </div>
+            <div class="feature-details">
+                <h3 class="feature-title">EDEN 3.0</h3>
+                <p class="feature-author">on&nbsp;&nbsp;&nbsp;<strong>23rd May</strong></p>
+            </div>
+        </div>
+
+          <!-- Feature Card 5 -->
+          <div class="feature-container">
+            <div class="feature-card">
+                <span class="feature-hover-text">GUITAR</span>
+                <img src="https://i.ibb.co/Lzxxm29m/Whats-App-Image-2025-02-22-at-14-37-16-db243eed.jpg" alt="Feature 5">
+            </div>
+            <div class="feature-details">
+                <h3 class="feature-title">GUITAR</h3>
+                <p class="feature-author">on&nbsp;&nbsp;&nbsp;<strong>20th April</strong></p>
+            </div>
+        </div>
+
+          <!-- Feature Card 6 -->
+          <div class="feature-container">
+            <div class="feature-card">
+                <span class="feature-hover-text">Drums5</span>
+                <img src="https://i.ibb.co/jk8sKRtj/Whats-App-Image-2025-02-22-at-14-37-16-dbffedce.jpg" alt="Feature 6">
+            </div>
+            <div class="feature-details">
+                <h3 class="feature-title">Drums5</h3>
+                <p class="feature-author">on&nbsp;&nbsp;&nbsp;<strong>20th April</strong></p>
+            </div>
+        </div>
+
+        </div>
+        
+        <!-- View More Link -->
+        <div class="view-more">
+            <p>Check out all events&nbsp;&nbsp;<span class="arrow">→</span> 
+                <a href="events.html" class="view-events">View Events</a>
+                <br><br><br><br><br>
+            </p>
+        </div>
+
+    </section>
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-logo">
+                <span>W.</span>
+            </div>
+            <div class="footer-links">
+                <div class="footer-column">
+                    <a href="#home-navbar">Home</a>
+                    <a href="#feature-events-section">Events</a>
+                    <a href="#">Colleges</a>
+                </div>
+                <div class="footer-column">
+                    <a href="#">Tech Fest</a>
+                    <a href="#">Cultural Fest</a>
+                    <a href="#">sports</a>
+                </div>
+                <div class="footer-column">
+                    <a href="#">Workshops</a>
+                    <a href="#">Hackathons</a>
+                </div>
+                <div class="footer-column">
+                    <a href="#">FAQs</a>
+                    <a href="#">About Us</a>
+                    <a href="#">Contact Us</a>
+                </div>
+            </div>
+        </div>
+    </footer>    
+
+    <nav class="bottom-nav" id="bottomNav">
+        <ul>
+            <li><a href="#" class="static-btn">W.</a></li>
+            <li><a href="#home-navbar"><i class="fas fa-home"></i> Home</a></li>
+            <li><a href="#feature-events-section"><i class="fas fa-calendar"></i> Events</a></li>
+            <li><a href="#"><i class="fas fa-star"></i> College</a></li>
+            <li><a href="#feature-workshop-section"><i class="fas fa-user"></i> Workshops</a></li>
+            <li><a href="#" class="static-btn2">Create Event</a></li>
+        </ul>
+    </nav>    
+
     <script>
-        document.getElementById("search-btn").addEventListener("click", function() {
-            alert("Search functionality coming soon!");
+
+        /* Bottom Navigation Hide/Show */
+        let navTimeout;
+        const bottomNav = document.getElementById("bottomNav");
+
+        function hideNav() {
+            bottomNav.classList.add("hidden");
+        }
+
+        function showNav() {
+            bottomNav.classList.remove("hidden");
+            clearTimeout(navTimeout);
+            navTimeout = setTimeout(hideNav, 5000);
+        }
+
+        document.addEventListener("mousemove", showNav);
+        document.addEventListener("scroll", showNav);
+
+        /* Search Pop-up */
+        const searchBtn = document.getElementById("search-box");
+        const exploreBtn = document.getElementById("explore-box");
+        const searchPopup = document.getElementById("searchPopup");
+        const closePopupBtn = document.getElementById("closePopup");
+        const popupContent = document.querySelector(".search-popup-content");
+
+        // Open search pop-up
+        searchBtn.addEventListener("click", (event) => {
+            event.stopPropagation();
+            searchPopup.classList.add("active");
+            document.body.style.overflow = "hidden";
         });
 
-        document.getElementById("current-date").innerText = new Date().toLocaleDateString('en-US', {
-            month: 'short', day: '2-digit', year: 'numeric'
+        exploreBtn.addEventListener("click", (event) => {
+            event.stopPropagation();
+            searchPopup.classList.add("active");
+            document.body.style.overflow = "hidden";
         });
 
+        // Close search pop-up
+        function closePopup() {
+            searchPopup.classList.remove("active");
+            document.body.style.overflow = "auto";
+        }
+
+        // Close on clicking close button
+        if (closePopupBtn) {
+            closePopupBtn.addEventListener("click", (event) => {
+                event.stopPropagation();
+                closePopup();
+            });
+        }
+
+        // Close when clicking outside the pop-up
+        document.addEventListener("click", (event) => {
+            if (!popupContent.contains(event.target) && searchPopup.classList.contains("active")) {
+                closePopup();
+            }
+        });
     </script>
+
+
 </body>
 </html>
 

@@ -225,11 +225,6 @@ body {
     opacity: 1;
 }
 
-
-.feature-card:hover .feature-hover-text {
-    opacity: 1;
-}
-
 /* Feature Details - Always Visible Below */
 .feature-details {
     display: flex; /* Aligns items in a row */
