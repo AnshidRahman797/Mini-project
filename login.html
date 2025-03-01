@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Popup</title>
+    <link rel="stylesheet" href="styles.css">
+    <script defer src="script.js"></script>
+</head>
+<body>
+
+    <!-- Login Popup -->
+    <div class="login-popup" id="loginPopup">
+        <div class="popup-content">
+            <!-- Left Section -->
+            <div class="left-side">
+                <h2>Welcome!</h2>
+                <img src="logo.png" alt="Logo">
+                <p>Not a member yet? <a href="#">Register now</a></p>
+            </div>
+
+            <!-- Right Section (Login Form) -->
+            <div class="right-side">
+                <h2>Log in</h2>
+                <form>
+                    <div class="input-group">
+                        <label for="email">EMAIL OR USERNAME</label>
+                        <input type="text" id="email" placeholder="Email or Username">
+                    </div>
+                    <div class="input-group">
+                        <label for="password">PASSWORD</label>
+                        <input type="password" id="password" placeholder="Password">
+                    </div>
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="rememberMe">
+                        <label for="rememberMe">Keep me logged in</label>
+                    </div>
+                    <button type="submit" class="login-btn">Log in now</button>
+                    <p class="forgot-password"><a href="#">Forgot your password?</a></p>
+                </form>
+                
+                <!-- Social Login Buttons -->
+                <!-- Social Login Buttons -->
+                    <p class="social-text">Or sign in with</p>
+                    <div class="social-buttons">
+                        <button class="google-btn"><img src="google.jpeg" alt="Google"> Sign in with Google</button>
+                        <button class="twitter-btn"><img src="tw,jpeg.jpg" alt="Twitter"> Sign in with Twitter</button>
+                    </div>
+
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

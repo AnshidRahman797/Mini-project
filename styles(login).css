@@ -1,0 +1,194 @@
+/* Basic Page Reset */
+body {
+    font-family: Arial, sans-serif;
+    background: #f8f8f8;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+/* Login Popup Container */
+.login-popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 550px; /* Adjusted width */
+    max-width: 90%;
+    background: white;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    display: block;
+    z-index: 1000;
+    overflow: hidden;
+}
+
+/* Popup Content Layout */
+.popup-content {
+    display: flex;
+    flex-direction: row;
+}
+
+/* Left Section */
+.left-side {
+    width: 45%;
+    background: #f8f8f8;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    text-align: center;
+}
+
+.left-side h2 {
+    font-size: 22px;
+    margin-bottom: 8px;
+}
+
+/* Adjusted Logo Size */
+.left-side img {
+    width: 50px; /* Smaller logo */
+    height: 50px;
+    margin: 10px 0;
+}
+
+.left-side p {
+    font-size: 13px;
+}
+
+.left-side a {
+    text-decoration: none;
+    font-weight: bold;
+    color: #000;
+}
+
+/* Right Section (Login Form) */
+.right-side {
+    width: 55%;
+    padding: 25px;
+}
+
+.right-side h2 {
+    font-size: 20px;
+    margin-bottom: 12px;
+    font-weight: bold;
+}
+
+/* Input Fields */
+.input-group {
+    margin-bottom: 12px;
+}
+
+.input-group label {
+    font-size: 12px;
+    font-weight: bold;
+    color: #666;
+    display: block;
+    margin-bottom: 4px;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 8px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+/* Checkbox */
+.checkbox-group {
+    display: flex;
+    align-items: center;
+    font-size: 13px;
+    margin-bottom: 12px;
+}
+
+.checkbox-group input {
+    margin-right: 5px;
+}
+
+/* Login Button */
+.login-btn {
+    width: 100%;
+    padding: 10px;
+    background: #000;
+    color: white;
+    font-size: 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+/* Forgot Password */
+.forgot-password {
+    font-size: 12px;
+    text-align: right;
+    margin-top: 5px;
+}
+
+.forgot-password a {
+    text-decoration: none;
+    color: #000;
+    font-weight: bold;
+}
+
+/* Social Login */
+.social-text {
+    text-align: center;
+    margin-top: 12px;
+    font-size: 14px;
+    color: #666;
+}
+
+/* Social Buttons */
+.social-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+}
+
+.social-buttons button {
+    flex: 1;
+    margin: 5px;
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    cursor: pointer;
+    background: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.social-buttons button img {
+    width: 16px; /* Adjusted icon size */
+    height: 16px;
+    margin-right: 8px;
+}
+
+/* Responsive Design */
+@media (max-width: 600px) {
+    .popup-content {
+        flex-direction: column;
+    }
+    .left-side {
+        width: 100%;
+        border-bottom: 1px solid #ddd;
+        padding: 15px;
+    }
+    .right-side {
+        width: 100%;
+        padding: 20px;
+    }
+    .social-buttons {
+        flex-direction: column;
+    }
+    .social-buttons button {
+        width: 100%;
+        margin: 5px 0;
+    }
+}

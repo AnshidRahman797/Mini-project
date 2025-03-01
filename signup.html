@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Signup Page</title>
+    <link rel="stylesheet" href="styles1.css">
+</head>
+<body>
+
+    <!-- Signup Popup -->
+    <div class="signup-popup" id="signupPopup">
+        <div class="popup-content">
+            <!-- Left Section -->
+            <div class="left-side">
+                <h2>Welcome!</h2>
+                <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo">
+                <p>Already a member? <a href="#">Log in</a></p>
+            </div>
+
+            <!-- Right Section (Signup Form) -->
+            <div class="right-side">
+                <h2>Register with your e-mail</h2>
+                <form id="signupForm">
+                    <div class="input-group">
+                        <label for="username">USERNAME (<span style="color: red;">*</span>)</label>
+                        <input type="text" id="username" placeholder="Username" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="email">EMAIL (<span style="color: red;">*</span>)</label>
+                        <input type="email" id="email" placeholder="E-mail" required>
+                    </div>
+                    
+                    <!-- Password Fields - Now on Separate Lines -->
+                    <div class="input-group">
+                        <label for="password">PASSWORD (<span style="color: red;">*</span>)</label>
+                        <input type="password" id="password" placeholder="Password" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="repeat-password">REPEAT PASSWORD (<span style="color: red;">*</span>)</label>
+                        <input type="password" id="repeat-password" placeholder="Repeat Password" required>
+                    </div>
+
+                    <p class="privacy-text">
+                        By signing up, you agree to receive personalized emails about our services. See our 
+                        <a href="#">Privacy Policy</a> for more details.
+                    </p>
+
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="terms" required>
+                        <label for="terms">I have read and accept the <a href="#">Terms and Conditions</a></label>
+                    </div>
+
+                    <button type="submit" class="signup-btn">Create Account</button>
+                </form>
+
+                <div class="or-divider">
+                    <span>or sign up with</span>
+                </div>
+
+                <div class="social-buttons">
+                    <button class="google-btn"><img src="{{ url_for('static', filename='google.jpeg') }}" alt="Google"> Sign up with Google</button>
+                    <button class="twitter-btn"><img src="{{ url_for('static', filename='tw.jpeg') }}" alt="Twitter"> Sign up with Twitter</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<script>
+    document.getElementById("signupForm").addEventListener("submit", async function(event) {
+        event.preventDefault();  // Prevents form refresh
+    
+        let username = document.getElementById("username").value;
+        let email = document.getElementById("email").value;
+        let password = document.getElementById("password").value;
+        let repeatPassword = document.getElementById("repeat-password").value;
+    
+        if (!username || !email || !password || !repeatPassword) {
+            alert("Please fill in all fields.");
+            return;
+        }
+    
+        if (password !== repeatPassword) {
+            alert("Passwords do not match.");
+            return;
+        }
+    
+        let userData = { username, email, password };
+    
+        try {
+            let response = await fetch("http://127.0.0.1:5000/signup", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(userData),
+            });
+    
+            let result = await response.json();
+    
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status}: ${result.error}`);
+            }
+    
+            alert(result.message);
+        } catch (error) {
+            console.error("Fetch error:", error);
+            alert("Something went wrong: " + error.message);
+        }
+    });
+</script>
+
+</body>
+</html>
