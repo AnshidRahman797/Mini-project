@@ -23,18 +23,16 @@
             <input type="text" placeholder="Search for College Events" id="search-box">
             <button id="search-btn"><i class="fas fa-search"></i></button>
         </div>
-
         <div class="auth-buttons">
-            <a href="#">Log in</a>
-            <a href="#">Sign Up</a>
+            <a href="login.html">Log in</a>
+            <a href="signup.html">Sign Up</a>
             <div class="profile-icon" id="profileIcon" style="display: none;">
-                <i class="fas fa-user-circle"></i> <!-- FontAwesome Profile Icon -->
+                <i class="fas fa-user-circle"></i>
             </div>
-            <button class="btn-pro">Create Event</button>
-        </div>
-
-        
-        
+            <a href="createevent.html">
+               <button class="btn-pro">Create Event</button>
+           </a>
+        </div>  
     </header>
 
     <section class="searchbar">
@@ -284,7 +282,6 @@
     </nav>    
 
     <script>
-
         /* Bottom Navigation Hide/Show */
         let navTimeout;
         const bottomNav = document.getElementById("bottomNav");
@@ -343,8 +340,6 @@
             }
         });
     </script>
-
-
 </body>
 </html>
 
