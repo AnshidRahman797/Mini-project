@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fest Registration Form</title>
+    <link rel="stylesheet" href="styles3.css">
+</head>
+<body>
+
+    <div class="container">
+        <h2>Fest Registration Form</h2>
+        <form action="#" method="POST">
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="festName">Fest Name:</label>
+                    <input type="text" id="festName" name="festName" required>
+                </div>
+                <div class="form-group">
+                    <label for="festCaption">Fest Caption:</label>
+                    <input type="text" id="festCaption" name="festCaption">
+                </div>
+                <div class="form-group">
+                    <label for="festTheme">Fest Theme:</label>
+                    <input type="text" id="festTheme" name="festTheme">
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="country">Country:</label>
+                    <input type="text" id="country" name="country">
+                </div>
+                <div class="form-group">
+                    <label for="city">City:</label>
+                    <input type="text" id="city" name="city">
+                </div>
+                <div class="form-group">
+                    <label for="state">State:</label>
+                    <input type="text" id="state" name="state">
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="startDate">Start Date:</label>
+                    <input type="date" id="startDate" name="startDate">
+                </div>
+                <div class="form-group">
+                    <label for="endDate">End Date:</label>
+                    <input type="date" id="endDate" name="endDate">
+                </div>
+                <div class="form-group">
+                    <label for="registrationFees">Registration Fees:</label>
+                    <input type="text" id="registrationFees" name="registrationFees">
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="festWebsite">Fest Website:</label>
+                    <input type="url" id="festWebsite" name="festWebsite">
+                </div>
+                <div class="form-group">
+                    <label for="contactEmail">Contact Email:</label>
+                    <input type="email" id="contactEmail" name="contactEmail" required>
+                </div>
+                <div class="form-group">
+                    <label for="contactNumber">Contact Number:</label>
+                    <input type="tel" id="contactNumber" name="contactNumber">
+                </div>
+            </div>
+
+            <div class="form-group full-width">
+                <label for="festDescription">Fest Description:</label>
+                <textarea id="festDescription" name="festDescription"></textarea>
+            </div>
+
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+
+</body>
+</html>
