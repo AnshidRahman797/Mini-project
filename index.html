@@ -55,7 +55,20 @@
         <img src="https://i.ibb.co/R40XmTHp/Screenshot-20-2-2025-215358-www-instagram-com.jpg" 
              alt="Featured Image" class="featured-image">
         
-        <div class="image-container">
+        <div class="image-container" 
+            onclick="openPopup({
+                title: 'TECH FEST',
+                description: 'Special Event',
+                imageUrl: 'https://i.ibb.co/R40XmTHp/Screenshot-20-2-2025-215358-www-instagram-com.jpg',
+                date: '24th March',
+                collegeName: 'GEC Palakkad',
+                collegeLocation: 'Sreekrishnapuram, Palakkad',
+                contactNumber: '9876543210',
+                contactEmail: 'contactemail@gmail.com',
+                registrationFee: '0 Rs',
+                registrationLink: 'googleform.link',
+                eventDescription: 'additional description about the events'
+            })">
             <img src="https://i.ibb.co/R40XmTHp/Screenshot-20-2-2025-215358-www-instagram-com.jpg" 
                  alt="Mini Image" class="mini-image">
         </div>
@@ -76,39 +89,62 @@
                 description: 'Special Event',
                 imageUrl: 'https://i.ibb.co/Ld7T3BHX/Whats-App-Image-2025-02-22-at-14-26-39-594e19db.jpg',
                 date: '24th February',
-                extraDetails: 'This is an additional description providing more details about the event.',
-                moreText: 'Here you can add even more text as needed.'
-                })">
-            <div class="feature-card">
-            <span class="feature-hover-text">Special Event</span>
-            <img src="https://i.ibb.co/Ld7T3BHX/Whats-App-Image-2025-02-22-at-14-26-39-594e19db.jpg" alt="Feature 1">
-            </div>
-            <div class="feature-details">
-            <h3 class="feature-title">GPL'25</h3>
-            <p class="feature-author">on&nbsp;&nbsp;&nbsp;<strong>24th February</strong></p>
-            </div>
+                collegeName: 'GEC Palakkad',
+                collegeLocation: 'Sreekrishnapuram, Palakkad',
+                contactNumber: '9876543210',
+                contactEmail: 'contactemail@gmail.com',
+                registrationFee: '0 Rs',
+                registrationLink: 'googleform.link',
+                eventDescription: 'additional description about the events'
+            })">
+                <div class="feature-card">
+                    <span class="feature-hover-text">Special Event</span>
+                    <img src="https://i.ibb.co/Ld7T3BHX/Whats-App-Image-2025-02-22-at-14-26-39-594e19db.jpg" alt="Feature 1">
+                </div>
+                <div class="feature-details">
+                    <h3 class="feature-title">GPL'25</h3>
+                    <p class="feature-author">on&nbsp;&nbsp;&nbsp;<strong>24th February</strong></p>
+                </div>
             </div>
 
             <!-- Event Popup -->
             <div class="popup-overlay" id="popupOverlay">
                 <div class="popup-content">
-                    <span class="close-btn" onclick="closeEventPopup()">&times;</span>
                     <div class="popup-body">
                         <img id="popup-image" src="" alt="Event Image">
                         <div class="popup-details">
                             <h2 id="popup-title">Placeholder Title</h2>
-                            <p id="popup-description">Placeholder description goes here.</p>
-                            <p><strong>Date:</strong> <span id="popup-date"></span></p>
-                            <p id="popup-extra-details">Additional details go here.</p>
-                            <p id="popup-more-text">More text goes here.</p>
+                            <p id="popup-description">placeholder description</p>
+                            <p><strong style="color: #737373;">Date: </strong><strong><span id="popup-date"></span></strong></p>
+                            <p><strong style="color: #737373;">College: </strong> <span id="popup-college-name">College name not given</span></p>
+                            <p><strong style="color: #737373;">Location: </strong> <span id="popup-college-location">College location not given</span></p>
+                            <p><strong style="color: #737373;">Contact: </strong> <span id="popup-contact-number">NILL</span></p>
+                            <p><strong style="color: #737373;">Email: </strong> <span id="popup-contact-email">NILL</span></p>
+                            <p><strong style="color: #737373;">Registration Fee:</strong> <span id="popup-registration-fee">NILL</span></p>
+                            <p><strong style="color: #737373;">Registration Link:</strong> <span id="popup-registration-link">NILL</span></p>
+                            <p id="popup-event-description">   </p>
                         </div>
                     </div>
                 </div>
             </div>
 
 
+
             <!-- Feature Card 2 -->
-            <div class="feature-container">
+            <div class="feature-container" 
+            onclick="openPopup({
+                title: 'Cricket Tournament',
+                description: 'Special Event',
+                imageUrl: 'https://i.ibb.co/YH0nZ0V/Whats-App-Image-2025-02-22-at-14-26-42-531a91a9.jpg',
+                date: '28th February',
+                collegeName: 'GEC Palakkad',
+                collegeLocation: 'Sreekrishnapuram, Palakkad',
+                contactNumber: '9876543210',
+                contactEmail: 'contactemail@gmail.com',
+                registrationFee: '0 Rs',
+                registrationLink: 'googleform.link',
+                eventDescription: 'additional description about the events'
+            })">
                 <div class="feature-card">
                     <span class="feature-hover-text">Cricket Tournament</span>
                     <img src="https://i.ibb.co/YH0nZ0V/Whats-App-Image-2025-02-22-at-14-26-42-531a91a9.jpg" alt="Feature 2">
@@ -120,7 +156,20 @@
             </div>
 
             <!-- Feature Card 3 -->
-            <div class="feature-container">
+            <div class="feature-container" 
+            onclick="openPopup({
+                title: 'MATRIX 2.0',
+                description: 'Special Event',
+                imageUrl: 'https://i.ibb.co/KcZWBLBC/Whats-App-Image-2025-02-22-at-14-32-16-f5a98472.jpg',
+                date: '24-25 January',
+                collegeName: 'GEC Palakkad',
+                collegeLocation: 'Sreekrishnapuram, Palakkad',
+                contactNumber: '9876543210',
+                contactEmail: 'contactemail@gmail.com',
+                registrationFee: '0 Rs',
+                registrationLink: 'googleform.link',
+                eventDescription: 'additional description about the events'
+            })">
                 <div class="feature-card">
                     <span class="feature-hover-text">MATRIX 2.0</span>
                     <img src="https://i.ibb.co/KcZWBLBC/Whats-App-Image-2025-02-22-at-14-32-16-f5a98472.jpg" alt="Feature 3">
@@ -132,7 +181,20 @@
             </div>
 
             <!-- Feature Card 4 -->
-            <div class="feature-container">
+            <div class="feature-container"
+            onclick="openPopup({
+                title: 'EDEN 3.0',
+                description: 'Special Event',
+                imageUrl: 'https://i.ibb.co/r2766zYb/Whats-App-Image-2025-02-22-at-14-37-16-29efee74.jpg',
+                date: '23rd May',
+                collegeName: 'GEC Palakkad',
+                collegeLocation: 'Sreekrishnapuram, Palakkad',
+                contactNumber: '9876543210',
+                contactEmail: 'contactemail@gmail.com',
+                registrationFee: '0 Rs',
+                registrationLink: 'googleform.link',
+                eventDescription: 'additional description about the events'
+            })">
                 <div class="feature-card">
                     <span class="feature-hover-text">EDEN 3.0</span>
                     <img src="https://i.ibb.co/r2766zYb/Whats-App-Image-2025-02-22-at-14-37-16-29efee74.jpg" alt="Feature 4">
@@ -144,7 +206,20 @@
             </div>
 
             <!-- Feature Card 5 -->
-            <div class="feature-container">
+            <div class="feature-container"
+            onclick="openPopup({
+                title: 'GUITAR',
+                description: 'Special Event',
+                imageUrl: 'https://i.ibb.co/Lzxxm29m/Whats-App-Image-2025-02-22-at-14-37-16-db243eed.jpg',
+                date: '20th April',
+                collegeName: 'GEC Palakkad',
+                collegeLocation: 'Sreekrishnapuram, Palakkad',
+                contactNumber: '9876543210',
+                contactEmail: 'contactemail@gmail.com',
+                registrationFee: '0 Rs',
+                registrationLink: 'googleform.link',
+                eventDescription: 'additional description about the events'
+            })">
                 <div class="feature-card">
                     <span class="feature-hover-text">GUITAR</span>
                     <img src="https://i.ibb.co/Lzxxm29m/Whats-App-Image-2025-02-22-at-14-37-16-db243eed.jpg" alt="Feature 5">
@@ -156,7 +231,20 @@
             </div>
 
             <!-- Feature Card 6 -->
-            <div class="feature-container">
+            <div class="feature-container"
+            onclick="openPopup({
+                title: 'Drums5',
+                description: 'Special Event',
+                imageUrl: 'https://i.ibb.co/jk8sKRtj/Whats-App-Image-2025-02-22-at-14-37-16-dbffedce.jpg',
+                date: '20th April',
+                collegeName: 'GEC Palakkad',
+                collegeLocation: 'Sreekrishnapuram, Palakkad',
+                contactNumber: '9876543210',
+                contactEmail: 'contactemail@gmail.com',
+                registrationFee: '0 Rs',
+                registrationLink: 'googleform.link',
+                eventDescription: 'additional description about the events'
+            })">
                 <div class="feature-card">
                     <span class="feature-hover-text">Drums5</span>
                     <img src="https://i.ibb.co/jk8sKRtj/Whats-App-Image-2025-02-22-at-14-37-16-dbffedce.jpg" alt="Feature 6">
@@ -300,7 +388,7 @@
             <li><a href="#feature-events-section"></i> Events</a></li>
             <li><a href="#"> College</a></li>
             <li><a href="#feature-workshop-section"> Workshops</a></li>
-            <li><a href="#" class="static-btn2">Create Event</a></li>
+            <li><a href="createevent.html" class="static-btn2">Create Event</a></li>
         </ul>
     </nav>    
 
@@ -363,15 +451,20 @@
             }
         });
 
-        // Open Event Popup
+         // Open Event Popup
         function openPopup(data) {
-        document.getElementById("popup-title").innerText = data.title;
-        document.getElementById("popup-description").innerText = data.description;
-        document.getElementById("popup-image").src = data.imageUrl;
-        document.getElementById("popup-date").innerText = data.date;
-        document.getElementById("popup-extra-details").innerText = data.extraDetails;
-        document.getElementById("popup-more-text").innerText = data.moreText;
-        document.getElementById("popupOverlay").style.display = "flex";
+            document.getElementById("popup-title").innerText = data.title;
+            document.getElementById("popup-image").src = data.imageUrl;
+            document.getElementById("popup-date").innerText = data.date;
+            document.getElementById("popup-description").innerText=data.description;
+            document.getElementById("popup-college-name").innerText = data.collegeName;
+            document.getElementById("popup-college-location").innerText = data.collegeLocation;
+            document.getElementById("popup-contact-number").innerText = data.contactNumber;
+            document.getElementById("popup-contact-email").innerText = data.contactEmail;
+            document.getElementById("popup-registration-fee").innerText = data.registrationFee;
+            document.getElementById("popup-registration-link").innerText = data.registrationLink;
+            document.getElementById("popup-event-description").innerText = data.eventDescription;
+            document.getElementById("popupOverlay").style.display = "flex";
 
             document.getElementById('popupOverlay').classList.add('active');
             document.body.style.overflow = "hidden"; // Disable scrolling when popup is open
@@ -380,6 +473,7 @@
         // Close Event Popup
         function closeEventPopup() {
             document.getElementById('popupOverlay').classList.remove('active');
+            document.getElementById("popupOverlay").style.display = "none";
             document.body.style.overflow = "auto"; // Enable scrolling when popup is closed
         }
 
