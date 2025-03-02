@@ -70,17 +70,43 @@
     <section class="feature-section">
         <div class="feature-grid">
             <!-- Feature Card 1 -->
-            <div class="feature-container">
-                <div class="feature-card">
-                    <span class="feature-hover-text">Special Event</span>
-                    <img src="https://i.ibb.co/Ld7T3BHX/Whats-App-Image-2025-02-22-at-14-26-39-594e19db.jpg" alt="Feature 1">
-                </div>
-                <div class="feature-details">
-                    <h3 class="feature-title">GPL'25</h3>
-                    <p class="feature-author">on&nbsp;&nbsp;&nbsp;<strong>24th February</strong></p>
+            <div class="feature-container" 
+            onclick="openPopup({
+                title: 'GPL\'25',
+                description: 'Special Event',
+                imageUrl: 'https://i.ibb.co/Ld7T3BHX/Whats-App-Image-2025-02-22-at-14-26-39-594e19db.jpg',
+                date: '24th February',
+                extraDetails: 'This is an additional description providing more details about the event.',
+                moreText: 'Here you can add even more text as needed.'
+                })">
+            <div class="feature-card">
+            <span class="feature-hover-text">Special Event</span>
+            <img src="https://i.ibb.co/Ld7T3BHX/Whats-App-Image-2025-02-22-at-14-26-39-594e19db.jpg" alt="Feature 1">
+            </div>
+            <div class="feature-details">
+            <h3 class="feature-title">GPL'25</h3>
+            <p class="feature-author">on&nbsp;&nbsp;&nbsp;<strong>24th February</strong></p>
+            </div>
+            </div>
+
+            <!-- Event Popup -->
+            <div class="popup-overlay" id="popupOverlay">
+                <div class="popup-content">
+                    <span class="close-btn" onclick="closeEventPopup()">&times;</span>
+                    <div class="popup-body">
+                        <img id="popup-image" src="" alt="Event Image">
+                        <div class="popup-details">
+                            <h2 id="popup-title">Placeholder Title</h2>
+                            <p id="popup-description">Placeholder description goes here.</p>
+                            <p><strong>Date:</strong> <span id="popup-date"></span></p>
+                            <p id="popup-extra-details">Additional details go here.</p>
+                            <p id="popup-more-text">More text goes here.</p>
+                        </div>
+                    </div>
                 </div>
             </div>
-    
+
+
             <!-- Feature Card 2 -->
             <div class="feature-container">
                 <div class="feature-card">
@@ -93,63 +119,60 @@
                 </div>
             </div>
 
-        <!-- Feature Card 3 -->
-        <div class="feature-container">
-            <div class="feature-card">
-                <span class="feature-hover-text">MATRIX 2.0</span>
-                <img src="https://i.ibb.co/KcZWBLBC/Whats-App-Image-2025-02-22-at-14-32-16-f5a98472.jpg" alt="Feature 3">
+            <!-- Feature Card 3 -->
+            <div class="feature-container">
+                <div class="feature-card">
+                    <span class="feature-hover-text">MATRIX 2.0</span>
+                    <img src="https://i.ibb.co/KcZWBLBC/Whats-App-Image-2025-02-22-at-14-32-16-f5a98472.jpg" alt="Feature 3">
+                </div>
+                <div class="feature-details">
+                    <h3 class="feature-title">MATRIX 2.0</h3>
+                    <p class="feature-author">on&nbsp;&nbsp;&nbsp;<strong>24-25 January</strong></p>
+                </div>
             </div>
-            <div class="feature-details">
-                <h3 class="feature-title">MATRIX 2.0</h3>
-                <p class="feature-author">on&nbsp;&nbsp;&nbsp;<strong>24-25 January</strong></p>
-            </div>
-        </div>
 
-        <!-- Feature Card 4 -->
-        <div class="feature-container">
-            <div class="feature-card">
-                <span class="feature-hover-text">EDEN 3.0</span>
-                <img src="https://i.ibb.co/r2766zYb/Whats-App-Image-2025-02-22-at-14-37-16-29efee74.jpg" alt="Feature 4">
+            <!-- Feature Card 4 -->
+            <div class="feature-container">
+                <div class="feature-card">
+                    <span class="feature-hover-text">EDEN 3.0</span>
+                    <img src="https://i.ibb.co/r2766zYb/Whats-App-Image-2025-02-22-at-14-37-16-29efee74.jpg" alt="Feature 4">
+                </div>
+                <div class="feature-details">
+                    <h3 class="feature-title">EDEN 3.0</h3>
+                    <p class="feature-author">on&nbsp;&nbsp;&nbsp;<strong>23rd May</strong></p>
+                </div>
             </div>
-            <div class="feature-details">
-                <h3 class="feature-title">EDEN 3.0</h3>
-                <p class="feature-author">on&nbsp;&nbsp;&nbsp;<strong>23rd May</strong></p>
-            </div>
-        </div>
 
-          <!-- Feature Card 5 -->
-          <div class="feature-container">
-            <div class="feature-card">
-                <span class="feature-hover-text">GUITAR</span>
-                <img src="https://i.ibb.co/Lzxxm29m/Whats-App-Image-2025-02-22-at-14-37-16-db243eed.jpg" alt="Feature 5">
+            <!-- Feature Card 5 -->
+            <div class="feature-container">
+                <div class="feature-card">
+                    <span class="feature-hover-text">GUITAR</span>
+                    <img src="https://i.ibb.co/Lzxxm29m/Whats-App-Image-2025-02-22-at-14-37-16-db243eed.jpg" alt="Feature 5">
+                </div>
+                <div class="feature-details">
+                    <h3 class="feature-title">GUITAR</h3>
+                    <p class="feature-author">on&nbsp;&nbsp;&nbsp;<strong>20th April</strong></p>
+                </div>
             </div>
-            <div class="feature-details">
-                <h3 class="feature-title">GUITAR</h3>
-                <p class="feature-author">on&nbsp;&nbsp;&nbsp;<strong>20th April</strong></p>
-            </div>
-        </div>
 
-          <!-- Feature Card 6 -->
-          <div class="feature-container">
-            <div class="feature-card">
-                <span class="feature-hover-text">Drums5</span>
-                <img src="https://i.ibb.co/jk8sKRtj/Whats-App-Image-2025-02-22-at-14-37-16-dbffedce.jpg" alt="Feature 6">
-            </div>
-            <div class="feature-details">
-                <h3 class="feature-title">Drums5</h3>
-                <p class="feature-author">on&nbsp;&nbsp;&nbsp;<strong>20th April</strong></p>
-            </div>
-        </div>
-
-    </div>
+            <!-- Feature Card 6 -->
+            <div class="feature-container">
+                <div class="feature-card">
+                    <span class="feature-hover-text">Drums5</span>
+                    <img src="https://i.ibb.co/jk8sKRtj/Whats-App-Image-2025-02-22-at-14-37-16-dbffedce.jpg" alt="Feature 6">
+                </div>
+                <div class="feature-details">
+                    <h3 class="feature-title">Drums5</h3>
+                    <p class="feature-author">on&nbsp;&nbsp;&nbsp;<strong>20th April</strong></p>
+                </div>
+            </div>                     
     
-       <!-- View More Link -->
-<div class="view-more">
-    <p>Check out all events&nbsp;&nbsp;<span class="arrow">→</span> 
-        <a href="events.html" class="view-events">View Events</a>
-    </p>
-</div>
-
+        <!-- View More Link -->
+        <div class="view-more">
+            <p>Check out all events&nbsp;&nbsp;<span class="arrow">→</span> 
+                <a href="events.html" class="view-events">View Events</a>
+            </p>
+        </div>
     </section>    
 
     <section class="heading-section" id="feature-workshop-section">
@@ -303,8 +326,8 @@
         const searchBtn = document.getElementById("search-box");
         const exploreBtn = document.getElementById("explore-box");
         const searchPopup = document.getElementById("searchPopup");
-        const closePopupBtn = document.getElementById("closePopup");
-        const popupContent = document.querySelector(".search-popup-content");
+        const closeSearchPopupBtn = document.getElementById("closePopup");
+        const searchPopupContent = document.querySelector(".search-popup-content");
 
         // Open search pop-up
         searchBtn.addEventListener("click", (event) => {
@@ -320,25 +343,55 @@
         });
 
         // Close search pop-up
-        function closePopup() {
+        function closeSearchPopup() {
             searchPopup.classList.remove("active");
             document.body.style.overflow = "auto";
         }
 
-        // Close on clicking close button
-        if (closePopupBtn) {
-            closePopupBtn.addEventListener("click", (event) => {
+        // Close search pop-up on clicking close button
+        if (closeSearchPopupBtn) {
+            closeSearchPopupBtn.addEventListener("click", (event) => {
                 event.stopPropagation();
-                closePopup();
+                closeSearchPopup();
             });
         }
 
-        // Close when clicking outside the pop-up
+        // Close search pop-up when clicking outside
         document.addEventListener("click", (event) => {
-            if (!popupContent.contains(event.target) && searchPopup.classList.contains("active")) {
-                closePopup();
+            if (!searchPopupContent.contains(event.target) && searchPopup.classList.contains("active")) {
+                closeSearchPopup();
             }
         });
+
+        // Open Event Popup
+        function openPopup(data) {
+        document.getElementById("popup-title").innerText = data.title;
+        document.getElementById("popup-description").innerText = data.description;
+        document.getElementById("popup-image").src = data.imageUrl;
+        document.getElementById("popup-date").innerText = data.date;
+        document.getElementById("popup-extra-details").innerText = data.extraDetails;
+        document.getElementById("popup-more-text").innerText = data.moreText;
+        document.getElementById("popupOverlay").style.display = "flex";
+
+            document.getElementById('popupOverlay').classList.add('active');
+            document.body.style.overflow = "hidden"; // Disable scrolling when popup is open
+        }
+
+        // Close Event Popup
+        function closeEventPopup() {
+            document.getElementById('popupOverlay').classList.remove('active');
+            document.body.style.overflow = "auto"; // Enable scrolling when popup is closed
+        }
+
+        // Ensure clicking inside the popup does not close it
+        document.querySelector(".popup-content").addEventListener("click", function(event) {
+            event.stopPropagation();
+        });
+
+        // Close popup when clicking outside
+        document.getElementById('popupOverlay').addEventListener("click", closeEventPopup);
+
+
     </script>
 </body>
 </html>
