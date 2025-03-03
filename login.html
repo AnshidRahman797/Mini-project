@@ -4,32 +4,35 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login Popup</title>
-    <link rel="stylesheet" href="styles(login).css">
-    <script defer src="script.js"></script>
+    <link rel="stylesheet" href="styles-login.css">
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
 </head>
 <body>
 
     <!-- Login Popup -->
-    <div class="login-popup" id="loginPopup">
+    <div class="loginForm" id="loginForm">
         <div class="popup-content">
             <!-- Left Section -->
             <div class="left-side">
                 <h2>Welcome!</h2>
                 <img src="logo.png" alt="Logo">
-                <p>Not a member yet? <a href="#">Register now</a></p>
+                <p>Not a member yet? <a href="C:\Users\dell\Desktop\Mini-project\signup.html" id="registerLink">Register now</a></p>  <!-- ✅ Redirects to signup.html -->
             </div>
 
             <!-- Right Section (Login Form) -->
             <div class="right-side">
                 <h2>Log in</h2>
-                <form>
+                <form id="loginFormElement">
                     <div class="input-group">
                         <label for="email">EMAIL OR USERNAME</label>
                         <input type="text" id="email" placeholder="Email or Username">
+                        <p class="error-message" id="emailError"></p>  <!-- ✅ Error message placeholder -->
                     </div>
                     <div class="input-group">
                         <label for="password">PASSWORD</label>
                         <input type="password" id="password" placeholder="Password">
+                        <p class="error-message" id="passwordError"></p>  <!-- ✅ Error message placeholder -->
                     </div>
                     <div class="checkbox-group">
                         <input type="checkbox" id="rememberMe">
@@ -38,18 +41,98 @@
                     <button type="submit" class="login-btn">Log in now</button>
                     <p class="forgot-password"><a href="#">Forgot your password?</a></p>
                 </form>
-                
-                <!-- Social Login Buttons -->
-                <!-- Social Login Buttons -->
-                    <p class="social-text">Or sign in with</p>
-                    <div class="social-buttons">
-                        <button class="google-btn"><img src="google.jpeg" alt="Google"> Sign in with Google</button>
-                        <button class="twitter-btn"><img src="tw,jpeg.jpg" alt="Twitter"> Sign in with Twitter</button>
-                    </div>
 
+                <!-- Social Login Buttons -->
+                <p class="social-text">Or sign in with</p>
+                <div class="social-buttons">
+                    <button class="google-btn"><img src="google.jpeg" alt="Google"> Sign in with Google</button>
+                    <button class="twitter-btn"><img src="tw.jpeg" alt="Twitter"> Sign in with Twitter</button>
+                </div>
             </div>
         </div>
     </div>
+
+    <script>
+        // 🔥 Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyAx3LcZnN2DSwx-YLdvG7an0Mgnr4NlQXk",
+            authDomain: "event-management-6eab1.firebaseapp.com",
+            projectId: "event-management-6eab1",
+            storageBucket: "event-management-6eab1.firebasestorage.app",
+            messagingSenderId: "792652272458",
+            appId: "1:792652272458:web:0aa7019690d73b7801e7b3"
+        };
+
+        // ✅ Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+
+        document.getElementById("loginFormElement").addEventListener("submit", async function(event) {
+            event.preventDefault();
+
+            let email = document.getElementById("email").value.trim();
+            let password = document.getElementById("password").value.trim();
+            let emailError = document.getElementById("emailError");
+            let passwordError = document.getElementById("passwordError");
+
+            // ✅ Reset previous error messages
+            emailError.textContent = "";
+            passwordError.textContent = "";
+
+            let hasError = false;
+
+            if (!email) {
+                emailError.textContent = "Please fill the login credentials";
+                emailError.style.color = "red";
+                hasError = true;
+            }
+            if (!password) {
+                passwordError.textContent = "Please fill the login credentials";
+                passwordError.style.color = "red";
+                hasError = true;
+            }
+            if (hasError) return;  // ✅ Stop execution if there is an error
+
+            try {
+                let userCredential = await firebase.auth().signInWithEmailAndPassword(email, password);
+                let user = userCredential.user;
+                let idToken = await user.getIdToken();
+
+                console.log("ID Token:", idToken);  // Debugging
+
+                let response = await fetch("http://127.0.0.1:5000/login", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ email: email, password: password, idToken: idToken }),
+                });
+
+                let result = await response.json();
+                console.log("Server Response:", result);  // Debugging
+
+                if (!response.ok) {
+                    throw new Error(result.error);
+                }
+
+                alert(result.message);
+            } catch (error) {
+                console.error("Login error:", error);
+                alert("Login failed: " + error.message);
+            }
+        });
+
+        // ✅ Redirect to signup page when clicking "Register now"
+        document.getElementById("registerLink").addEventListener("click", function(event) {
+            event.preventDefault();
+            window.location.href = "signup.html";
+        });
+
+    </script>
+
+    <style>
+        .error-message {
+            font-size: 12px;
+            margin-top: 5px;
+        }
+    </style>
 
 </body>
 </html>

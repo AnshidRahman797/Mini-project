@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify, render_template
+from flask import Flask, request, jsonify, render_template,send_file
 import firebase_admin
 from firebase_admin import credentials, auth, firestore
 from flask_cors import CORS
@@ -14,7 +14,7 @@ db = firestore.client()  # Firestore Database
 # 📌 Serve the Signup Page
 @app.route('/', methods=['GET'])
 def home():
-    return render_template('signup.html')  # Serve the frontend
+    return send_file('signup.html')  # Serve the frontend
 
 # 📌 Signup Route (Register User in Firebase Auth)
 @app.route('/signup', methods=['GET', 'POST'])
@@ -52,4 +52,4 @@ def signup():
         return jsonify({"error": str(e)}), 400
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True,port=5000)
