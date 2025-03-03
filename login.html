@@ -16,8 +16,9 @@
             <!-- Left Section -->
             <div class="left-side">
                 <h2>Welcome!</h2>
-                <img src="logo.png" alt="Logo">
-                <p>Not a member yet? <a href="C:\Users\dell\Desktop\Mini-project\signup.html" id="registerLink">Register now</a></p>  <!-- ✅ Redirects to signup.html -->
+                <h3>K.</h3>
+                <p>Not a member yet? <a href="/signup" id="registerLink">Register now</a></p>  <!-- ✅ Redirects to Flask signup route -->
+  <!-- ✅ Redirects to signup.html -->
             </div>
 
             <!-- Right Section (Login Form) -->
@@ -45,8 +46,8 @@
                 <!-- Social Login Buttons -->
                 <p class="social-text">Or sign in with</p>
                 <div class="social-buttons">
-                    <button class="google-btn"><img src="google.jpeg" alt="Google"> Sign in with Google</button>
-                    <button class="twitter-btn"><img src="tw.jpeg" alt="Twitter"> Sign in with Twitter</button>
+                    <button class="google-btn"><a href="https://ibb.co/KxYy8c04"><img src="https://i.ibb.co/KxYy8c04/Google-Symbol.png" alt="Google-Symbol" border="0"></a> Sign in with Google</button>
+                    <button class="twitter-btn"><a href="https://ibb.co/dJWNcL7y"><img src="https://i.ibb.co/dJWNcL7y/OIP-1.jpg" alt="OIP-1" border="0"></a> Sign in with Twitter</button>
                 </div>
             </div>
         </div>
@@ -120,10 +121,13 @@
         });
 
         // ✅ Redirect to signup page when clicking "Register now"
-        document.getElementById("registerLink").addEventListener("click", function(event) {
+       // ✅ Redirect to Flask Signup Page (Same Port)
+            document.getElementById("registerLink").addEventListener("click", function(event) {
             event.preventDefault();
-            window.location.href = "signup.html";
-        });
+            window.location.href = "/signup";  // ✅ Redirects to Flask signup route
+});
+
+        
 
     </script>
 
