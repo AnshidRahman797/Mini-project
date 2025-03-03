@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Signup Page</title>
-    <link rel="stylesheet" href="styles(signup).css">
+    <link rel="stylesheet" href="styles-signup.css">
 </head>
 <body>
 
@@ -15,7 +15,8 @@
             <div class="left-side">
                 <h2>Welcome!</h2>
                <h3>K.</h3>
-                <p>Already a member? <a href="#">Log in</a></p>
+               <p>Already a member? <a href="/login" id="registerLink">login</a></p>  <!-- ✅ Redirects to Flask signup route -->
+
             </div>
 
             <!-- Right Section (Signup Form) -->
@@ -106,6 +107,12 @@
             alert("Something went wrong: " + error.message);
         }
     });
+    // ✅ Redirect to Flask Signup Page (Same Port)
+    document.getElementById("registerLink").addEventListener("click", function(event) {
+        event.preventDefault();
+        window.location.href = "/login";  // ✅ Redirects to Flask signup route
+    });
+
 </script>
 
 </body>
