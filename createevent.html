@@ -3,83 +3,161 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fest Registration Form</title>
-    <link rel="stylesheet" href="styles3.css">
+    <title>Event Registration Form</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow-y: auto;
+        }
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            background: white;
+            padding: 60px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            overflow-y: auto;
+        }
+        h2 {
+            text-align: center;
+        }
+        .form-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 80px;
+            justify-content: space-between;
+            margin-bottom: 50px;
+        }
+        .form-group div {
+            flex: 1;
+            min-width: 250px;
+        }
+        label {
+            font-weight: bold;
+            display: block;
+            margin-top: 30px;
+        }
+        input, textarea, select {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .required {
+            color: red;
+        }
+        button {
+            width: 100%;
+            padding: 15px;
+            background-color: black;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            margin-top: 50px;
+            cursor: pointer;
+            font-size: 18px;
+        }
+        button:hover {
+            background-color: #333;
+        }
+    </style>
 </head>
 <body>
-
     <div class="container">
-        <h2>Fest Registration Form</h2>
-        <form action="#" method="POST">
-            
-            <div class="form-row">
-                <div class="form-group">
-                    <label for="festName">Fest Name:</label>
-                    <input type="text" id="festName" name="festName" required>
+        <h2>Event Registration Form</h2>
+        <form>
+            <div class="form-group">
+                <div>
+                    <label>Event Name: <span class="required">*</span></label>
+                    <input type="text" name="event_name" placeholder="Enter event name" required>
                 </div>
-                <div class="form-group">
-                    <label for="festCaption">Fest Caption:</label>
-                    <input type="text" id="festCaption" name="festCaption">
+                <div>
+                    <label>Event Caption: <span class="required">*</span></label>
+                    <input type="text" name="event_caption" placeholder="Enter event caption" required>
                 </div>
-                <div class="form-group">
-                    <label for="festTheme">Fest Theme:</label>
-                    <input type="text" id="festTheme" name="festTheme">
-                </div>
-            </div>
-
-            <div class="form-row">
-                <div class="form-group">
-                    <label for="country">Country:</label>
-                    <input type="text" id="country" name="country">
-                </div>
-                <div class="form-group">
-                    <label for="city">City:</label>
-                    <input type="text" id="city" name="city">
-                </div>
-                <div class="form-group">
-                    <label for="state">State:</label>
-                    <input type="text" id="state" name="state">
+                <div>
+                    <label>Event Type: <span class="required">*</span></label>
+                    <select name="event_type" required>
+                        <option value="">Select Event Type</option>
+                        <option value="Techfest">Techfest</option>
+                        <option value="Workshop">Workshop</option>
+                        <option value="Hackathon">Hackathon</option>
+                        <option value="Celebration">Celebration</option>
+                        <option value="Others">Others</option>
+                    </select>
                 </div>
             </div>
-
-            <div class="form-row">
-                <div class="form-group">
-                    <label for="startDate">Start Date:</label>
-                    <input type="date" id="startDate" name="startDate">
+            <div class="form-group">
+                <div>
+                    <label>Event Fee:</label>
+                    <input type="number" name="event_fee" placeholder="Enter event fee">
                 </div>
-                <div class="form-group">
-                    <label for="endDate">End Date:</label>
-                    <input type="date" id="endDate" name="endDate">
+                <div>
+                    <label>Start Date: <span class="required">*</span></label>
+                    <input type="date" name="start_date" required>
                 </div>
-                <div class="form-group">
-                    <label for="registrationFees">Registration Fees:</label>
-                    <input type="text" id="registrationFees" name="registrationFees">
-                </div>
-            </div>
-
-            <div class="form-row">
-                <div class="form-group">
-                    <label for="festWebsite">Fest Website:</label>
-                    <input type="url" id="festWebsite" name="festWebsite">
-                </div>
-                <div class="form-group">
-                    <label for="contactEmail">Contact Email:</label>
-                    <input type="email" id="contactEmail" name="contactEmail" required>
-                </div>
-                <div class="form-group">
-                    <label for="contactNumber">Contact Number:</label>
-                    <input type="tel" id="contactNumber" name="contactNumber">
+                <div>
+                    <label>End Date: <span class="required">*</span></label>
+                    <input type="date" name="end_date" required>
                 </div>
             </div>
-
-            <div class="form-group full-width">
-                <label for="festDescription">Fest Description:</label>
-                <textarea id="festDescription" name="festDescription"></textarea>
+            <div class="form-group">
+                <div>
+                    <label>Country: <span class="required">*</span></label>
+                    <select name="country" required>
+                        <option value="">Select Country</option>
+                        <option value="India">India</option>
+                        <option value="USA">USA</option>
+                        <option value="UK">UK</option>
+                    </select>
+                </div>
+                <div>
+                    <label>State: <span class="required">*</span></label>
+                    <select name="state" required>
+                        <option value="">Select State</option>
+                    </select>
+                </div>
+                <div>
+                    <label>City: <span class="required">*</span></label>
+                    <select name="city" required>
+                        <option value="">Select City</option>
+                    </select>
+                </div>
             </div>
-
+            <div class="form-group">
+                <div>
+                    <label>College Name: <span class="required">*</span></label>
+                    <input type="text" name="college_name" placeholder="Enter college name" required>
+                </div>
+                <div>
+                    <label>Contact Email:</label>
+                    <input type="email" name="contact_email" placeholder="Enter contact email">
+                </div>
+                <div>
+                    <label>Contact Number: <span class="required">*</span></label>
+                    <input type="tel" name="contact_number" placeholder="Enter contact number" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <div>
+                    <label>Upload Image: <span class="required">*</span></label>
+                    <input type="file" name="event_image" required>
+                </div>
+                <div>
+                    <label>Event Description:</label>
+                    <textarea name="event_description" placeholder="Enter event details"></textarea>
+                </div>
+            </div>
             <button type="submit">Submit</button>
         </form>
     </div>
-
 </body>
 </html>
