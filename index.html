@@ -393,7 +393,6 @@
     </nav>    
 
     <script>
-        /* Bottom Navigation Hide/Show */
         let navTimeout;
         const bottomNav = document.getElementById("bottomNav");
 
@@ -410,14 +409,12 @@
         document.addEventListener("mousemove", showNav);
         document.addEventListener("scroll", showNav);
 
-        /* Search Pop-up */
         const searchBtn = document.getElementById("search-box");
         const exploreBtn = document.getElementById("explore-box");
         const searchPopup = document.getElementById("searchPopup");
         const closeSearchPopupBtn = document.getElementById("closePopup");
         const searchPopupContent = document.querySelector(".search-popup-content");
 
-        // Open search pop-up
         searchBtn.addEventListener("click", (event) => {
             event.stopPropagation();
             searchPopup.classList.add("active");
@@ -430,13 +427,11 @@
             document.body.style.overflow = "hidden";
         });
 
-        // Close search pop-up
         function closeSearchPopup() {
             searchPopup.classList.remove("active");
             document.body.style.overflow = "auto";
         }
 
-        // Close search pop-up on clicking close button
         if (closeSearchPopupBtn) {
             closeSearchPopupBtn.addEventListener("click", (event) => {
                 event.stopPropagation();
@@ -444,14 +439,12 @@
             });
         }
 
-        // Close search pop-up when clicking outside
         document.addEventListener("click", (event) => {
             if (!searchPopupContent.contains(event.target) && searchPopup.classList.contains("active")) {
                 closeSearchPopup();
             }
         });
 
-         // Open Event Popup
         function openPopup(data) {
             document.getElementById("popup-title").innerText = data.title;
             document.getElementById("popup-image").src = data.imageUrl;
@@ -467,22 +460,19 @@
             document.getElementById("popupOverlay").style.display = "flex";
 
             document.getElementById('popupOverlay').classList.add('active');
-            document.body.style.overflow = "hidden"; // Disable scrolling when popup is open
+            document.body.style.overflow = "hidden";
         }
 
-        // Close Event Popup
         function closeEventPopup() {
             document.getElementById('popupOverlay').classList.remove('active');
             document.getElementById("popupOverlay").style.display = "none";
-            document.body.style.overflow = "auto"; // Enable scrolling when popup is closed
+            document.body.style.overflow = "auto"; 
         }
 
-        // Ensure clicking inside the popup does not close it
         document.querySelector(".popup-content").addEventListener("click", function(event) {
             event.stopPropagation();
         });
 
-        // Close popup when clicking outside
         document.getElementById('popupOverlay').addEventListener("click", closeEventPopup);
 
 
