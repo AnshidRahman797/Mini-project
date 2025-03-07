@@ -93,7 +93,7 @@
 <body>
     <div class="container">
         <h2>Event Registration Form</h2>
-        <form>
+        <form enctype="multipart/form-data">
             <div class="form-group">
                 <div>
                     <label>Event Name: <span class="required">*</span></label>
@@ -286,6 +286,34 @@
             endDate.value = this.value; // Sync end date with start date
         }
     });
+    document.querySelector("form").addEventListener("submit", async function (event) {
+    event.preventDefault(); // Prevent form from refreshing
+
+    // Get form elements
+    let formData = new FormData(this);  // Automatically gets all form fields & files
+
+    // Send data to Flask backend
+    try {
+        let response = await fetch("http://127.0.0.1:5000/createevent", {
+            method: "POST",
+            body: formData, // Send form data (not JSON)
+        });
+
+        let result = await response.json();
+        console.log("Server Response:", result);
+
+        if (!response.ok) {
+            throw new Error(result.error);
+        }
+
+        alert(result.message);
+    } catch (error) {
+        console.error("Error submitting event:", error);
+        alert("Event submission failed: " + error.message);
+    }
+});
+
+
 
     </script>
 </body>
