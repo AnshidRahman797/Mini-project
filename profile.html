@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile Page</title>
+
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js"></script>
+
+    <!-- Cropper.js -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
+
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: #fff;
+            color: #000;
+        }
+
+        .profile-container {
+            width: 70%;
+            max-width: 600px;
+            height: 80vh;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid black;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            overflow-y: auto;
+        }
+
+        .profile-pic-container {
+            position: relative;
+            cursor: pointer;
+        }
+
+        .profile-pic {
+            width: 140px;
+            height: 140px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid black;
+        }
+
+        .username {
+            font-size: 20px;
+            font-weight: bold;
+            text-align: center;
+            border: none;
+            background: transparent;
+            color: black;
+        }
+
+        .bio textarea {
+            width: 100%;
+            font-size: 14px;
+            border: none;
+            background: transparent;
+            color: black;
+            resize: none;
+            text-align: center;
+        }
+
+        .add-event-btn {
+            margin-top: 10px;
+            background: black;
+            color: white;
+            padding: 8px 12px;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 14px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+        }
+
+        .events-container {
+            margin-top: 10px;
+            width: 100%;
+            text-align: center;
+            font-size: 14px;
+            color: black;
+        }
+
+        /* Cropper Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            position: relative;
+        }
+
+        .close {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        .crop-container {
+            width: 100%;
+            max-height: 300px;
+            overflow: hidden;
+        }
+
+        .crop-btn {
+            background: black;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <div class="profile-container">
+        <div class="profile-header">
+            <div class="profile-pic-container" onclick="document.getElementById('fileInput').click()">
+                <img id="profileImage" src="https://api.dicebear.com/7.x/adventurer/svg" alt="Profile Picture" class="profile-pic">
+                <input type="file" id="fileInput" accept="image/*" style="display: none;" onchange="previewImage(event)">
+            </div>
+            <div class="profile-info">
+                <input type="text" id="username" placeholder="Username" class="username">
+                <div class="details" id="email"></div>
+                <div class="bio"><textarea id="bio" placeholder="Write something..."></textarea></div>
+            </div>
+        </div>
+        <a href="add-event.html" class="add-event-btn">Add Event</a>
+        <div class="events-container" id="eventsContainer">You have to upload some events to display...</div>
+    </div>
+
+    <!-- Modal for Cropping Image -->
+    <div id="cropModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h3>Crop Your Profile Picture</h3>
+            <div class="crop-container">
+                <img id="cropImage">
+            </div>
+            <button class="crop-btn" onclick="applyCrop()">Set Profile Picture</button>
+        </div>
+    </div>
+
+    <script>
+        let cropper;
+        const fileInput = document.getElementById("fileInput");
+        const profileImage = document.getElementById("profileImage");
+        const cropImage = document.getElementById("cropImage");
+        const cropModal = document.getElementById("cropModal");
+
+        // Firebase Config
+        const firebaseConfig = {
+            apiKey: "YOUR_API_KEY",
+            authDomain: "YOUR_AUTH_DOMAIN",
+            projectId: "YOUR_PROJECT_ID",
+            storageBucket: "YOUR_STORAGE_BUCKET",
+            messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+            appId: "YOUR_APP_ID"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+
+        function loadUserProfile() {
+            db.collection("users").doc("user_id").get().then((doc) => {
+                if (doc.exists) {
+                    const data = doc.data();
+                    document.getElementById("username").value = data.username;
+                    document.getElementById("email").textContent = "Email: " + data.email;
+                    document.getElementById("bio").value = data.bio;
+                }
+            });
+        }
+
+        function previewImage(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                cropImage.src = e.target.result;
+                openModal();
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function openModal() {
+            cropModal.style.display = "flex";
+            if (cropper) {
+                cropper.destroy();
+            }
+            cropper = new Cropper(cropImage, {
+                aspectRatio: 1,
+                viewMode: 1,
+                dragMode: "move",
+                autoCropArea: 1,
+                responsive: true,
+            });
+        }
+
+        function closeModal() {
+            cropModal.style.display = "none";
+            if (cropper) {
+                cropper.destroy();
+            }
+        }
+
+        function applyCrop() {
+            const canvas = cropper.getCroppedCanvas({ width: 140, height: 140 });
+            profileImage.src = canvas.toDataURL();
+            closeModal();
+        }
+
+        window.onload = function() {
+            loadUserProfile();
+        };
+    </script>
+</body>
+</html>
