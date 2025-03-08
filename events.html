@@ -7,6 +7,58 @@
     <link rel="stylesheet" href="styles2.css">
     <script src="https://kit.fontawesome.com/YOUR_FA_KIT.js" crossorigin="anonymous"></script>
 </head>
+
+<script type="module">
+    // Import Firebase
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.2/firebase-app.js";
+    import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.7.2/firebase-firestore.js";
+  
+    const firebaseConfig = {
+        apiKey: "AIzaSyAx3LcZnN2DSwx-YLdvG7an0Mgnr4NlQXk",
+        authDomain: "event-management-6eab1.firebaseapp.com",
+        projectId: "event-management-6eab1",
+        storageBucket: "event-management-6eab1.firebasestorage.app",
+        messagingSenderId: "792652272458",
+        appId: "1:792652272458:web:0aa7019690d73b7801e7b3"
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+  
+    // Function to Fetch and Display Events
+    async function loadEvents() {
+      const eventsContainer = document.querySelector(".feature-grid"); // Select container
+      const querySnapshot = await getDocs(collection(db, "events")); // Fetch Firestore data
+  
+      eventsContainer.innerHTML = ""; // Clear existing HTML
+  
+      querySnapshot.forEach((doc) => {
+        const event = doc.data(); // Get event data
+  
+        // Create the event card
+        const eventHTML = `
+          <div class="feature-container">
+            <div class="feature-card">
+              <span class="feature-hover-text">${event.event_caption || "Special Event"}</span>
+              <img src="data:image/png;base64,${event.event_image_base64}" alt="${event.event_name}">
+            </div>
+            <div class="feature-details">
+              <h3 class="feature-title">${event.event_name}</h3>
+              <p class="feature-author">on&nbsp;&nbsp;&nbsp;<strong>${event.start_date}</strong></p>
+            </div>
+          </div>
+        `;
+  
+        eventsContainer.innerHTML += eventHTML; // Append event to container
+      });
+    }
+  
+    // Call the function when the page loads
+    window.onload = loadEvents;
+  </script>
+  
+
 <body>
     <header class="navbar">
         <div class="logo">K.</div>
@@ -59,78 +111,8 @@
 
     <section class="feature-section">
         <div class="feature-grid">
-            <!-- Feature Card 1 -->
-            <div class="feature-container">
-                <div class="feature-card">
-                    <span class="feature-hover-text">Special Event</span>
-                    <img src="https://i.ibb.co/Ld7T3BHX/Whats-App-Image-2025-02-22-at-14-26-39-594e19db.jpg" alt="Feature 1">
-                </div>
-                <div class="feature-details">
-                    <h3 class="feature-title">GPL'25</h3>
-                    <p class="feature-author">on&nbsp;&nbsp;&nbsp;<strong>24th February</strong></p>
-                </div>
-            </div>
-    
-            <!-- Feature Card 2 -->
-            <div class="feature-container">
-                <div class="feature-card">
-                    <span class="feature-hover-text">Cricket Tournament</span>
-                    <img src="https://i.ibb.co/YH0nZ0V/Whats-App-Image-2025-02-22-at-14-26-42-531a91a9.jpg" alt="Feature 2">
-                </div>
-                <div class="feature-details">
-                    <h3 class="feature-title">Cricket Tour</h3>
-                    <p class="feature-author">on&nbsp;&nbsp;&nbsp;<strong>28th February</strong></p>
-                </div>
-            </div>
-
-        <!-- Feature Card 3 -->
-        <div class="feature-container">
-            <div class="feature-card">
-                <span class="feature-hover-text">MATRIX 2.0</span>
-                <img src="https://i.ibb.co/KcZWBLBC/Whats-App-Image-2025-02-22-at-14-32-16-f5a98472.jpg" alt="Feature 3">
-            </div>
-            <div class="feature-details">
-                <h3 class="feature-title">MATRIX 2.0</h3>
-                <p class="feature-author">on&nbsp;&nbsp;&nbsp;<strong>24-25 January</strong></p>
-            </div>
+            
         </div>
-
-        <!-- Feature Card 4 -->
-        <div class="feature-container">
-            <div class="feature-card">
-                <span class="feature-hover-text">EDEN 3.0</span>
-                <img src="https://i.ibb.co/r2766zYb/Whats-App-Image-2025-02-22-at-14-37-16-29efee74.jpg" alt="Feature 4">
-            </div>
-            <div class="feature-details">
-                <h3 class="feature-title">EDEN 3.0</h3>
-                <p class="feature-author">on&nbsp;&nbsp;&nbsp;<strong>23rd May</strong></p>
-            </div>
-        </div>
-
-          <!-- Feature Card 5 -->
-          <div class="feature-container">
-            <div class="feature-card">
-                <span class="feature-hover-text">GUITAR</span>
-                <img src="https://i.ibb.co/Lzxxm29m/Whats-App-Image-2025-02-22-at-14-37-16-db243eed.jpg" alt="Feature 5">
-            </div>
-            <div class="feature-details">
-                <h3 class="feature-title">GUITAR</h3>
-                <p class="feature-author">on&nbsp;&nbsp;&nbsp;<strong>20th April</strong></p>
-            </div>
-        </div>
-
-          <!-- Feature Card 6 -->
-          <div class="feature-container">
-            <div class="feature-card">
-                <span class="feature-hover-text">Drums5</span>
-                <img src="https://i.ibb.co/jk8sKRtj/Whats-App-Image-2025-02-22-at-14-37-16-dbffedce.jpg" alt="Feature 6">
-            </div>
-            <div class="feature-details">
-                <h3 class="feature-title">Drums5</h3>
-                <p class="feature-author">on&nbsp;&nbsp;&nbsp;<strong>20th April</strong></p>
-            </div>
-        </div>
-
     </div>
 
     
