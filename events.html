@@ -5,14 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Website Header</title>
     <link rel="stylesheet" href="styles2.css">
-    <script src="https://kit.fontawesome.com/YOUR_FA_KIT.js" crossorigin="anonymous"></script>
+    <script src="https://kit.fontawesome.com/ab05a6b4fa.js" crossorigin="anonymous"></script>
 </head>
 
 <script type="module">
-    // Import Firebase
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.2/firebase-app.js";
-    import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.7.2/firebase-firestore.js";
-  
+
+   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.2/firebase-app.js";
+    import { getFirestore, collection, getDocs, query, where } from "https://www.gstatic.com/firebasejs/10.7.2/firebase-firestore.js";
+
     const firebaseConfig = {
         apiKey: "AIzaSyAx3LcZnN2DSwx-YLdvG7an0Mgnr4NlQXk",
         authDomain: "event-management-6eab1.firebaseapp.com",
@@ -25,35 +25,92 @@
     // Initialize Firebase
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
-  
-    // Function to Fetch and Display Events
-    async function loadEvents() {
-      const eventsContainer = document.querySelector(".feature-grid"); // Select container
-      const querySnapshot = await getDocs(collection(db, "events")); // Fetch Firestore data
-  
-      eventsContainer.innerHTML = ""; // Clear existing HTML
-  
-      querySnapshot.forEach((doc) => {
-        const event = doc.data(); // Get event data
-  
-        // Create the event card
-        const eventHTML = `
-          <div class="feature-container">
-            <div class="feature-card">
-              <span class="feature-hover-text">${event.event_caption || "Special Event"}</span>
-              <img src="data:image/png;base64,${event.event_image_base64}" alt="${event.event_name}">
-            </div>
-            <div class="feature-details">
-              <h3 class="feature-title">${event.event_name}</h3>
-              <p class="feature-author">on&nbsp;&nbsp;&nbsp;<strong>${event.start_date}</strong></p>
-            </div>
-          </div>
-        `;
-  
-        eventsContainer.innerHTML += eventHTML; // Append event to container
-      });
+
+    // Function to Fetch and Display Events with Filters
+    async function loadEvents(filters = {}) {
+    const eventsContainer = document.querySelector(".feature-grid");
+    eventsContainer.innerHTML = ""; // Clear previous results
+
+    let eventsRef = collection(db, "events");
+
+    // Build the Firestore query dynamically
+    const conditions = [];
+    if (filters.eventType) conditions.push(where("event_type", "==", filters.eventType)); // Fix field name
+    if (filters.state) conditions.push(where("state", "==", filters.state));
+    if (filters.city) conditions.push(where("city", "==", filters.city));
+    if (filters.college) conditions.push(where("college", "==", filters.college));
+    if (filters.date) conditions.push(where("start_date", "==", filters.date));
+
+    let q = conditions.length > 0 ? query(eventsRef, ...conditions) : eventsRef;
+
+    try {
+        const querySnapshot = await getDocs(q);
+
+        if (querySnapshot.empty) {
+            eventsContainer.innerHTML = "<p>No events found.</p>";
+            return;
+        }
+
+        querySnapshot.forEach((doc) => {
+            const event = doc.data();
+            const eventHTML = `
+                <div class="feature-container" id="event-list">
+                    <div class="feature-card">
+                        <span class="feature-hover-text">${event.event_caption || "Special Event"}</span>
+                        <img src="data:image/png;base64,${event.event_image_base64}" alt="${event.event_name}">
+                    </div>
+                    <div class="feature-details">
+                        <h3 class="feature-title">${event.event_name}</h3>
+                        <p class="feature-author">on&nbsp;&nbsp;&nbsp;<strong>${event.start_date}</strong></p>
+                    </div>
+                </div>
+            `;
+            eventsContainer.innerHTML += eventHTML;
+        });
+    } catch (error) {
+        console.error("Error fetching events:", error);
+        eventsContainer.innerHTML = "<p>Error loading events.</p>";
     }
-  
+}
+
+// Filter Handling
+document.addEventListener("DOMContentLoaded", () => {
+    const filters = {
+        eventType: "",
+        state: "",
+        city: "",
+        college: "",
+        date: ""
+    };
+
+    function updateFilters() {
+        filters.eventType = document.querySelector("#eventType").value;
+        filters.state = document.querySelector("#state").value;
+        filters.city = document.querySelector("#city").value;
+        filters.college = document.querySelector("#college").value;
+        filters.date = document.querySelector("#date").value;
+
+        loadEvents(filters);
+    }
+
+    // Listen for filter changes
+    document.querySelectorAll(".dropdown-menu").forEach((dropdown) => {
+        dropdown.addEventListener("change", updateFilters);
+    });
+
+    // Reset filters
+    document.querySelector(".reset-btn").addEventListener("click", () => {
+        document.querySelectorAll(".dropdown-menu").forEach((dropdown) => {
+            dropdown.value = "";
+        });
+
+        Object.keys(filters).forEach(key => filters[key] = ""); // Clear filters
+        loadEvents(filters);
+    });
+
+    loadEvents(); // Load all events initially
+});
+
     // Call the function when the page loads
     window.onload = loadEvents;
   </script>
@@ -61,52 +118,58 @@
 
 <body>
     <header class="navbar">
-        <div class="logo">K.</div>
-        <nav>
-            <ul class="nav-links">
-                <li><a href="#">Explore</a></li>
-                <li><a href="#">Events</a></li>
-                <li><a href="#">Colleges</a></li>
-                <li><a href="#">Departments</a></li>
-                <li><a href="#">Workshops</a></li>
-            </ul>
-        </nav>
+        <a href="index.html"><div class="logo">K.</div></a>
         <div class="search-container">
             <input type="text" placeholder="Search for College Events" id="search-box">
             <button id="search-btn"><i class="fas fa-search"></i></button>
         </div>
         <div class="auth-buttons">
-            <a href="#">Log in</a>
-            <a href="#">Sign Up</a>
+            <a href="profile.html" style="color: inherit;">
+            <div class="profile-icon" id="profileIcon">
+                <i class="fas fa-user-circle"></i>
+            </div> </a>
+            <a href="createevent.html">
             <button class="btn-pro">Create Event</button>
+            </a>
         </div>
     </header>
 
     <div class="filter-section">
         <div class="filters">
-            <select class="dropdown-menu">
-                <option value="">Event Type</option>
-                <option value="best-design">Best Design</option>
-                <option value="top-innovation">Top Innovation</option>
+            <select id="eventType" class="dropdown-menu">
+                <option value="" disabled selected hidden>Event Type</option>
+                <option value="Techfest">Tech Fest</option>
+                <option value="Workshop">Workshop</option>
+                <option value="Hackathon">Hackathon</option>
+                <option value="Celebration">Celebration</option>
             </select>
-            <select class="dropdown-menu">
-                <option value="">College</option>
-                <option value="web-design">Web Design</option>
-                <option value="graphic-design">Graphic Design</option>
+            
+            <select id="state" class="dropdown-menu">
+                <option value="" disabled selected hidden>State</option>
+                <option value="Andhra Pradesh">Andhra Pradesh</option>
+                <option value="Karnataka">Karnataka</option>
+                <option value="Tamil Nadu">Tamil Nadu</option>
+                <option value="Kerala">Kerala</option>
+                <option value="Maharashtra">Maharashtra</option>
+                <option value="Punjab">Punjab</option>
             </select>
-            <select class="dropdown-menu">
-                <option value="">Department</option>
-                <option value="modern">Mode   rn</option>
-                <option value="minimal">Mini  mal</option>
+            
+            <select id="city" class="dropdown-menu">
+                <option value="" disabled selected hidden>City</option>
+                <option value="Palakkad">Palakkad</option>
+                <option value="Kochi">Kochi</option>
             </select>
-            <select class="dropdown-menu">
-                <option value="">Date</option>
-                <option value="html">HTML</option>
-                <option value="css">CSS</option>
+            
+            <select id="college" class="dropdown-menu">
+                <option value="" disabled selected hidden>College</option>
+                <option value="Government Engineering College, Sreekrishnapuram">GEC Palakkad</option>
+                <option value="NSS College of Engineering">NSS Palakkad</option>
             </select>
+            
+            <input type="date" id="date" class="dropdown-menu">
+
         </div>
             <button class="reset-btn">Reset filters</button>
-        </div>
     </div>
 
     <section class="feature-section">

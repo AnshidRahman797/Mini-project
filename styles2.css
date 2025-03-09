@@ -16,6 +16,11 @@ body {
     background-color: #f8f8f8;
 }
 
+
+a {
+    text-decoration: none !important;
+}
+
 .logo {
     font-size: 24px;
     font-weight: bold;
@@ -46,7 +51,7 @@ body {
     border-radius: 7px;
     padding: 5px 10px;
     background-color: #ededed;
-    width: 450px;
+    width: 1000px;
     max-width: 100%; 
 }
 
@@ -55,6 +60,7 @@ body {
     border: none;
     outline: none;
     padding: 7px;
+    width: 950px;
     padding-left: 20px;
 }
 
@@ -65,12 +71,16 @@ body {
     font-size: 16px;
 }
 
-.auth-buttons a {
-    text-decoration: none;
-    color: #1f2325;
-    margin: 0 10px;
-    font-size: 16px;
+.auth-buttons {
+    display: flex;
+    gap: 70px;
 }
+
+.profile-icon i {
+    margin-top: 4px;
+    font-size: 30px; /* Adjust the size as needed */
+}
+
 
 .btn-pro {
     background-color: #1f2325;
