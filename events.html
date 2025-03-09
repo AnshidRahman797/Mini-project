@@ -10,7 +10,7 @@
 
 <script type="module">
 
-   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.2/firebase-app.js";
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.2/firebase-app.js";
     import { getFirestore, collection, getDocs, query, where } from "https://www.gstatic.com/firebasejs/10.7.2/firebase-firestore.js";
 
     const firebaseConfig = {
@@ -22,98 +22,110 @@
         appId: "1:792652272458:web:0aa7019690d73b7801e7b3"
     };
 
-    // Initialize Firebase
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
-    // Function to Fetch and Display Events with Filters
-    async function loadEvents(filters = {}) {
-    const eventsContainer = document.querySelector(".feature-grid");
-    eventsContainer.innerHTML = ""; // Clear previous results
-
-    let eventsRef = collection(db, "events");
-
-    // Build the Firestore query dynamically
-    const conditions = [];
-    if (filters.eventType) conditions.push(where("event_type", "==", filters.eventType)); // Fix field name
-    if (filters.state) conditions.push(where("state", "==", filters.state));
-    if (filters.city) conditions.push(where("city", "==", filters.city));
-    if (filters.college) conditions.push(where("college", "==", filters.college));
-    if (filters.date) conditions.push(where("start_date", "==", filters.date));
-
-    let q = conditions.length > 0 ? query(eventsRef, ...conditions) : eventsRef;
-
-    try {
-        const querySnapshot = await getDocs(q);
-
-        if (querySnapshot.empty) {
-            eventsContainer.innerHTML = "<p>No events found.</p>";
-            return;
-        }
-
-        querySnapshot.forEach((doc) => {
-            const event = doc.data();
-            const eventHTML = `
-                <div class="feature-container" id="event-list">
-                    <div class="feature-card">
-                        <span class="feature-hover-text">${event.event_caption || "Special Event"}</span>
-                        <img src="data:image/png;base64,${event.event_image_base64}" alt="${event.event_name}">
-                    </div>
-                    <div class="feature-details">
-                        <h3 class="feature-title">${event.event_name}</h3>
-                        <p class="feature-author">on&nbsp;&nbsp;&nbsp;<strong>${event.start_date}</strong></p>
-                    </div>
-                </div>
-            `;
-            eventsContainer.innerHTML += eventHTML;
-        });
-    } catch (error) {
-        console.error("Error fetching events:", error);
-        eventsContainer.innerHTML = "<p>Error loading events.</p>";
-    }
-}
-
-// Filter Handling
-document.addEventListener("DOMContentLoaded", () => {
     const filters = {
         eventType: "",
         state: "",
         city: "",
         college: "",
-        date: ""
+        date: "",
+        searchQuery: ""
     };
 
+    async function loadEvents() {
+        const eventsContainer = document.querySelector(".feature-grid");
+        eventsContainer.innerHTML = ""; 
+
+        let eventsRef = collection(db, "events");
+        const conditions = [];
+
+        if (filters.eventType) conditions.push(where("event_type", "==", filters.eventType));
+        if (filters.state) conditions.push(where("state", "==", filters.state));
+        if (filters.city) conditions.push(where("city", "==", filters.city));
+        if (filters.college) conditions.push(where("college", "==", filters.college));
+        if (filters.date) conditions.push(where("start_date", "==", filters.date));
+
+        let q = conditions.length > 0 ? query(eventsRef, ...conditions) : eventsRef;
+
+        try {
+            const querySnapshot = await getDocs(q);
+            let events = [];
+
+            querySnapshot.forEach((doc) => {
+                events.push(doc.data());
+            });
+
+            // 🔍 Apply Search Filter (Client-Side)
+            if (filters.searchQuery) {
+                events = events.filter(event => event.event_name.toLowerCase().includes(filters.searchQuery.toLowerCase()));
+            }
+
+            if (events.length === 0) {
+                eventsContainer.innerHTML = "<p>No events found.</p>";
+                return;
+            }
+
+            events.forEach((event) => {
+                const eventHTML = `
+                    <div class="feature-container" id="event-list">
+                        <div class="feature-card">
+                            <span class="feature-hover-text">${event.event_caption || "Special Event"}</span>
+                            <img src="data:image/png;base64,${event.event_image_base64}" alt="${event.event_name}">
+                        </div>
+                        <div class="feature-details">
+                            <h3 class="feature-title">${event.event_name}</h3>
+                            <p class="feature-author">on&nbsp;&nbsp;&nbsp;<strong>${event.start_date}</strong></p>
+                        </div>
+                    </div>
+                `;
+                eventsContainer.innerHTML += eventHTML;
+            });
+        } catch (error) {
+            console.error("Error fetching events:", error);
+            eventsContainer.innerHTML = "<p>Error loading events.</p>";
+        }
+    }
+
+    // Update Filters and Search Query
     function updateFilters() {
         filters.eventType = document.querySelector("#eventType").value;
         filters.state = document.querySelector("#state").value;
         filters.city = document.querySelector("#city").value;
         filters.college = document.querySelector("#college").value;
         filters.date = document.querySelector("#date").value;
+        filters.searchQuery = document.querySelector("#search-box").value.trim();
 
-        loadEvents(filters);
+        loadEvents();
     }
 
-    // Listen for filter changes
-    document.querySelectorAll(".dropdown-menu").forEach((dropdown) => {
-        dropdown.addEventListener("change", updateFilters);
-    });
-
-    // Reset filters
-    document.querySelector(".reset-btn").addEventListener("click", () => {
+    document.addEventListener("DOMContentLoaded", () => {
+        // Dropdown Filter Listeners
         document.querySelectorAll(".dropdown-menu").forEach((dropdown) => {
-            dropdown.value = "";
+            dropdown.addEventListener("change", updateFilters);
         });
 
-        Object.keys(filters).forEach(key => filters[key] = ""); // Clear filters
-        loadEvents(filters);
+        // 🔍 Search Functionality
+        document.querySelector("#search-btn").addEventListener("click", updateFilters);
+        document.querySelector("#search-box").addEventListener("keypress", (event) => {
+            if (event.key === "Enter") updateFilters();
+        });
+
+        // Reset Filters & Search
+        document.querySelector(".reset-btn").addEventListener("click", () => {
+            document.querySelectorAll(".dropdown-menu, #search-box, #date").forEach((input) => {
+                input.value = "";
+            });
+
+            Object.keys(filters).forEach(key => filters[key] = "");
+            loadEvents();
+        });
+
+        loadEvents();
     });
 
-    loadEvents(); // Load all events initially
-});
-
-    // Call the function when the page loads
-    window.onload = loadEvents;
-  </script>
+</script>
   
 
 <body>
