@@ -191,4 +191,18 @@ body {
         width: 100%;
         margin: 5px 0;
     }
+    .success-popup {
+        display: none; /* ✅ Hide initially */
+        position: fixed;
+        top: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        background-color: #4CAF50;
+        color: white;
+        padding: 10px 20px;
+        border-radius: 5px;
+        font-weight: bold;
+        text-align: center;
+        z-index: 1000;
+    }
 }

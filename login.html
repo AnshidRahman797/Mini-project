@@ -7,6 +7,22 @@
     <link rel="stylesheet" href="styles-login.css">
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <style> 
+    .success-popup {
+        display: none; /* ✅ Hide initially */
+        position: fixed;
+        top: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        background-color: #4CAF50;
+        color: white;
+        padding: 10px 20px;
+        border-radius: 5px;
+        font-weight: bold;
+        text-align: center;
+        z-index: 1000;
+    }
+    </style>
 </head>
 <body>
 
@@ -23,6 +39,9 @@
 
             <!-- Right Section (Login Form) -->
             <div class="right-side">
+                <div class="success-popup" id="successPopup">
+                    <span>✅</span> User logged in successfully! Redirecting to home page...
+                </div>
                 <h2>Log in</h2>
                 <form id="loginFormElement">
                     <div class="input-group">
@@ -112,12 +131,46 @@
                 if (!response.ok) {
                     throw new Error(result.error);
                 }
+                // After successful login
+     
 
                 alert(result.message);
             } catch (error) {
                 console.error("Login error:", error);
                 alert("Login failed: " + error.message);
             }
+            firebase.auth().signInWithEmailAndPassword(email, password)
+    .then((userCredential) => {
+            let user = userCredential.user;
+            return user.getIdToken();  // ✅ Get Firebase ID Token
+        })
+    .then((idToken) => {
+        console.log("hello");
+        // ✅ Store login state in localStorage
+        localStorage.setItem("isLoggedIn", "true");
+
+        // ✅ Debugging: Check if value is set correctly
+        // ✅ Show success message popup
+        
+        // ✅ Show success message
+        successPopup.style.display = "block";
+
+        // ✅ Redirect to home page after 2 seconds
+        setTimeout(() => {
+            window.location.href = "index.html";  
+        }, 2000);
+    })
+    .catch((error) => {
+        console.error("Login error:", error);
+
+        // ✅ Ensure errorMessage exists before accessing
+        let errorMessage = document.getElementById("errorMessage");
+        if (errorMessage) {
+            errorMessage.textContent = "Login failed: " + error.message;
+            errorMessage.style.color = "red";
+        }
+    });
+
         });
 
         // ✅ Redirect to signup page when clicking "Register now"
@@ -126,8 +179,8 @@
             event.preventDefault();
             window.location.href = "/signup";  // ✅ Redirects to Flask signup route
 });
-
-        
+   // Debugging: Check if value is retrieved
+    
 
     </script>
 

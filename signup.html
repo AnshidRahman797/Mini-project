@@ -5,8 +5,34 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Signup Page</title>
     <link rel="stylesheet" href="styles-signup.css">
+    <style>
+        /* ✅ Success Message Popup Styling */
+        .success-popup {
+            display: none;
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #28a745;
+            color: white;
+            padding: 15px 20px;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: bold;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            text-align: center;
+        }
+        .success-popup span {
+            font-size: 20px;
+            margin-right: 8px;
+        }
+    </style>
 </head>
 <body>
+
+    <!-- ✅ Success Popup Message -->
+  
 
     <!-- Signup Popup -->
     <div class="signup-popup" id="signupPopup">
@@ -14,34 +40,41 @@
             <!-- Left Section -->
             <div class="left-side">
                 <h2>Welcome!</h2>
-               <h3>K.</h3>
-               <p>Already a member? <a href="/login" id="registerLink">login</a></p>  <!-- ✅ Redirects to Flask signup route -->
-
+                <h3>K.</h3>
+                <p>Already a member? <a href="/login" id="registerLink">login</a></p>
             </div>
 
             <!-- Right Section (Signup Form) -->
             <div class="right-side">
+                <div class="success-popup" id="successPopup">
+                    <span>✅</span> User registered successfully! Redirecting to login...
+                </div>
                 <h2>Register with your e-mail</h2>
                 <form id="signupForm">
                     <div class="input-group">
                         <label for="username">USERNAME (<span style="color: red;">*</span>)</label>
                         <input type="text" id="username" placeholder="Username" required>
+                        <p class="error-message" id="usernameError"></p> <!-- ✅ Error Message Placeholder -->
                     </div>
+                    
                     <div class="input-group">
                         <label for="email">EMAIL (<span style="color: red;">*</span>)</label>
                         <input type="email" id="email" placeholder="E-mail" required>
+                        <p class="error-message" id="emailError"></p> <!-- ✅ Error Message Placeholder -->
                     </div>
                     
-                    <!-- Password Fields - Now on Separate Lines -->
                     <div class="input-group">
                         <label for="password">PASSWORD (<span style="color: red;">*</span>)</label>
                         <input type="password" id="password" placeholder="Password" required>
+                        <p class="error-message" id="passwordError"></p> <!-- ✅ Error Message Placeholder -->
                     </div>
+                    
                     <div class="input-group">
                         <label for="repeat-password">REPEAT PASSWORD (<span style="color: red;">*</span>)</label>
                         <input type="password" id="repeat-password" placeholder="Repeat Password" required>
+                        <p class="error-message" id="repeatPasswordError"></p> <!-- ✅ Error Message Placeholder -->
                     </div>
-
+                    
                     <p class="privacy-text">
                         By signing up, you agree to receive personalized emails about our services. See our 
                         <a href="#">Privacy Policy</a> for more details.
@@ -60,60 +93,107 @@
                 </div>
 
                 <div class="social-buttons">
-                    <button class="google-btn"><a href="https://ibb.co/KxYy8c04"><img src="https://i.ibb.co/KxYy8c04/Google-Symbol.png" alt="Google-Symbol" border="0"></a></a> Sign up with Google</button>
-                    <button class="twitter-btn"><a href="https://ibb.co/dJWNcL7y"><img src="https://i.ibb.co/dJWNcL7y/OIP-1.jpg" alt="OIP-1" border="0"></a>Sign up with X</button>
+                    <button class="google-btn"><img src="https://i.ibb.co/KxYy8c04/Google-Symbol.png" alt="Google"> Sign up with Google</button>
+                    <button class="twitter-btn"><img src="https://i.ibb.co/dJWNcL7y/OIP-1.jpg" alt="Twitter"> Sign up with X</button>
                 </div>
             </div>
         </div>
     </div>
 
 <script>
-    document.getElementById("signupForm").addEventListener("submit", async function(event) {
-        event.preventDefault();  // Prevents form refresh
-    
-        let username = document.getElementById("username").value;
-        let email = document.getElementById("email").value;
-        let password = document.getElementById("password").value;
-        let repeatPassword = document.getElementById("repeat-password").value;
-    
-        if (!username || !email || !password || !repeatPassword) {
-            alert("Please fill in all fields.");
+    document.addEventListener("DOMContentLoaded", function () {
+    document.getElementById("signupForm").addEventListener("submit", async function (event) {
+        event.preventDefault();  // Prevent form refresh
+
+        let username = document.getElementById("username").value.trim();
+        let email = document.getElementById("email").value.trim();
+        let password = document.getElementById("password").value.trim();
+        let repeatPassword = document.getElementById("repeat-password").value.trim();
+
+        // ✅ Get the error message containers
+        let usernameError = document.getElementById("usernameError");
+        let emailError = document.getElementById("emailError");
+        let passwordError = document.getElementById("passwordError");
+        let repeatPasswordError = document.getElementById("repeatPasswordError");
+
+        // ✅ Ensure they exist before updating them
+        if (!usernameError || !emailError || !passwordError || !repeatPasswordError) {
+            console.error("One or more error elements are missing in the HTML.");
             return;
         }
-    
+
+        // ✅ Clear previous error messages
+        usernameError.textContent = "";
+        emailError.textContent = "";
+        passwordError.textContent = "";
+        repeatPasswordError.textContent = "";
+
+        let hasError = false;
+
+        if (!username) {
+            usernameError.textContent = "Username is required";
+            usernameError.style.color = "red";
+            hasError = true;
+        }
+
+        if (!email) {
+            emailError.textContent = "Email is required";
+            emailError.style.color = "red";
+            hasError = true;
+        }
+
+        if (!password) {
+            passwordError.textContent = "Password is required";
+            passwordError.style.color = "red";
+            hasError = true;
+        }
+
         if (password !== repeatPassword) {
-            alert("Passwords do not match.");
-            return;
+            repeatPasswordError.textContent = "Passwords do not match";
+            repeatPasswordError.style.color = "red";
+            hasError = true;
         }
+
+        if (hasError) return;  // ✅ Stop execution if there's an error
+
+        // ✅ Continue signup process...
     
         let userData = { username, email, password };
-    
+
         try {
             let response = await fetch("http://127.0.0.1:5000/signup", {
                 method: "POST",
-                mode: "cors",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(userData),
             });
-    
+
             let result = await response.json();
-    
+
             if (!response.ok) {
                 throw new Error(`HTTP ${response.status}: ${result.error}`);
             }
-    
-            alert(result.message);
+
+            // ✅ Show success message popup
+            let successPopup = document.getElementById("successPopup");
+            successPopup.style.display = "block";
+
+            // ✅ Redirect to login page after 3 seconds
+            setTimeout(() => {
+                window.location.href = "http://127.0.0.1:5000/login";
+            }, 3000);  // Redirect after 3 seconds
+
         } catch (error) {
             console.error("Fetch error:", error);
             alert("Something went wrong: " + error.message);
         }
     });
-    // ✅ Redirect to Flask Signup Page (Same Port)
+
+    // ✅ Redirect to Flask Login Page
     document.getElementById("registerLink").addEventListener("click", function(event) {
         event.preventDefault();
-        window.location.href = "/login";  // ✅ Redirects to Flask signup route
+        window.location.href = "http://127.0.0.1:5000/login";  // ✅ Redirects to Flask login route
     });
-
+});   
 </script>
 
 </body>
