@@ -11,6 +11,16 @@ cred = credentials.Certificate("serviceAccountKey.json")  # Ensure this file exi
 firebase_admin.initialize_app(cred)
 db = firestore.client()  # Firestore Database
 
+@app.route('/')
+def home():
+    return send_file("index.html")  # Ensure index.html is in the same folder as your Flask app
+@app.route('/')
+
+# Redirect to index.html after login
+@app.route('/redirect-to-home')
+def redirect_to_home():
+    return redirect(url_for('home'))  # Redirect to the home function
+
 # 📌 Serve the Signup Page
 @app.route('/signup', methods=['GET'])
 def signup_page():

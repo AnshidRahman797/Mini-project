@@ -217,4 +217,23 @@ body {
         width: 300%;
         margin-bottom: 10px;
     }
+    body, html {
+        overflow: visible !important;
+    }
+    .success-popup {
+        position: fixed; /* Keep it on screen */
+        top: 50%; /* Center vertically */
+        left: 50%; /* Center horizontally */
+        transform: translate(-50%, -50%); /* Perfect centering */
+        background-color: #4CAF50; /* Green success color */
+        color: white;
+        padding: 20px;
+        border-radius: 5px;
+        font-size: 18px;
+        font-weight: bold;
+        text-align: center;
+        z-index: 1000; /* Ensure it's above other content */
+        display: none; /* Initially hidden */
+    }
+    
 }
