@@ -146,16 +146,9 @@
         })
     .then((idToken) => {
         console.log("hello");
-        // ✅ Store login state in localStorage
         localStorage.setItem("isLoggedIn", "true");
-
-        // ✅ Debugging: Check if value is set correctly
-        // ✅ Show success message popup
-        
-        // ✅ Show success message
         successPopup.style.display = "block";
 
-        // ✅ Redirect to home page after 2 seconds
         setTimeout(() => {
             window.location.href = "index.html";  
         }, 2000);
