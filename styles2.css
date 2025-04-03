@@ -250,3 +250,96 @@ a {
     font-weight: bold;
     margin: 0; /* Removes default margin */
 }
+
+
+.event-popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.popup-content {
+    display: flex;
+    width: 80%;
+    max-width: 1000px;
+    max-height: 90vh;
+    background: #fff;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.popup-left {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f5f5f5;
+}
+
+.popup-left img {
+    width: 100%;
+    height: auto;
+    max-height: 100%;
+    object-fit: contain;
+    border-radius: 0;
+}
+
+.popup-right {
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto;
+}
+
+.popup-close {
+    position: absolute;
+    top: 20px;
+    right: 30px;
+    font-size: 30px;
+    cursor: pointer;
+    color: #fff;
+    z-index: 10000;
+}
+
+.event-popup .popup-left {
+    width: 50%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    background: #f5f5f5;
+}
+
+.popup-image {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    border-radius: 8px;
+}
+
+.notify-icon {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 22px;
+    color: #ffffff;
+    cursor: pointer;
+    display: none;
+    transition: transform 0.2s ease;
+    z-index: 100;
+}
+
+.feature-card:hover .notify-icon {
+    display: block;
+}
+
+.notify-icon i {
+    pointer-events: none;
+}

@@ -38,7 +38,7 @@
         const eventsContainer = document.querySelector(".feature-grid");
         eventsContainer.innerHTML = ""; 
 
-        let eventsRef = collection(db, "events");
+        let eventsRef = collection(db, "verified_events");
         const conditions = [];
 
         if (filters.eventType) conditions.push(where("event_type", "==", filters.eventType));
@@ -68,20 +68,62 @@
             }
 
             events.forEach((event) => {
-                const eventHTML = `
-                    <div class="feature-container" id="event-list">
-                        <div class="feature-card">
-                            <span class="feature-hover-text">${event.event_caption || "Special Event"}</span>
-                            <img src="data:image/png;base64,${event.event_image_base64}" alt="${event.event_name}">
-                        </div>
-                        <div class="feature-details">
-                            <h3 class="feature-title">${event.event_name}</h3>
-                            <p class="feature-author">on&nbsp;&nbsp;&nbsp;<strong>${event.start_date}</strong></p>
-                        </div>
+                const eventHTML = document.createElement("div");
+                eventHTML.classList.add("feature-container");
+                eventHTML.innerHTML = `
+                    <div class="feature-card" data-event-name="${event.event_name}" data-event-date="${event.start_date}">
+                        <span class="notify-icon" title="Set Notification">
+                            <i class="fa-regular fa-bell"></i>
+                        </span>
+                        <span class="feature-hover-text">${event.event_caption || "Special Event"}</span>
+                        <img src="data:image/png;base64,${event.event_image_base64}" alt="${event.event_name}">
+                    </div>
+                    <div class="feature-details">
+                        <h3 class="feature-title">${event.event_name}</h3>
+                        <p class="feature-author">on&nbsp;&nbsp;&nbsp;<strong>${event.start_date}</strong></p>
                     </div>
                 `;
-                eventsContainer.innerHTML += eventHTML;
+
+                // Event card click = open popup
+                eventHTML.querySelector(".feature-card").addEventListener("click", (e) => {
+                    // Prevent clicking on notify icon from triggering popup
+                    if (e.target.closest(".notify-icon")) return;
+                    showEventPopup(event);
+                });
+
+                // Notification icon logic
+                const notifyIcon = eventHTML.querySelector(".notify-icon");
+                const eventName = event.event_name;
+                const eventDate = event.start_date;
+
+                let reminders = JSON.parse(localStorage.getItem("reminders") || "[]");
+                const isEnabled = reminders.some(r => r.name === eventName && r.date === eventDate);
+                if (isEnabled) {
+                    notifyIcon.innerHTML = `<i class="fa-solid fa-bell"></i>`;
+                }
+
+                notifyIcon.addEventListener("click", () => {
+                    let reminders = JSON.parse(localStorage.getItem("reminders") || "[]");
+                    const index = reminders.findIndex(r => r.name === eventName && r.date === eventDate);
+                    
+                    if (index === -1) {
+                        // Add Notification
+                        reminders.push({ name: eventName, date: eventDate });
+                        notifyIcon.innerHTML = `<i class="fa-solid fa-bell"></i>`;
+                        alert(`🔔 ${eventName} will notify you on ${eventDate}`);
+                    } else {
+                        // Remove Notification
+                        reminders.splice(index, 1);
+                        notifyIcon.innerHTML = `<i class="fa-regular fa-bell"></i>`;
+                        alert(`🚫 Notification removed for ${eventName}`);
+                    }
+
+                    localStorage.setItem("reminders", JSON.stringify(reminders));
+                });
+
+                eventsContainer.appendChild(eventHTML);
             });
+
         } catch (error) {
             console.error("Error fetching events:", error);
             eventsContainer.innerHTML = "<p>Error loading events.</p>";
@@ -124,6 +166,45 @@
 
         loadEvents();
     });
+
+
+        // ✅ Popup Creator
+        function showEventPopup(event) {
+            const popup = document.createElement("div");
+            popup.classList.add("event-popup");
+
+            popup.innerHTML = `
+                <div class="popup-content">
+                    <span class="popup-close">&times;</span>
+                    <div class="popup-left">
+                        <img src="data:image/png;base64,${event.event_image_base64}" alt="${event.event_name}" class="popup-image">
+                    </div>
+                    <div class="popup-right">
+                        <h2>${event.event_name}</h2>
+                        <p><strong>Location:</strong> ${event.college}, ${event.city}, ${event.state}</p>
+                        <p><strong>Start Date:</strong> ${event.start_date}</p>
+                        <p><strong>Contact:</strong> ${event.contact_number}</p>
+                        <p><strong>Email:</strong> ${event.contact_email}</p>
+                        <p><strong>Event Type:</strong> ${event.event_type}</p>
+                        <p><strong>Event Fee:</strong> ${event.event_fee || "Free"}</p>
+                        <p><strong>Description:</strong> ${event.event_description}</p>
+                        <p><strong>Caption:</strong> ${event.event_caption}</p>
+                    </div>
+                </div>
+            `;
+
+            document.body.appendChild(popup);
+
+            // Close when clicking the close button
+            popup.querySelector(".popup-close").addEventListener("click", () => popup.remove());
+
+            // Close when clicking outside
+            popup.addEventListener("click", (e) => {
+                if (e.target === popup) popup.remove();
+            });
+        }
+
+
 
 </script>
   
