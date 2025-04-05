@@ -1,233 +1,214 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Panel</title>
-    <link rel="stylesheet" href="adminpanel.css">
-    <script src="https://kit.fontawesome.com/ab05a6b4fa.js" crossorigin="anonymous"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin Panel</title>
+  <link rel="stylesheet" href="adminpanel.css" />
+  <script src="https://kit.fontawesome.com/ab05a6b4fa.js" crossorigin="anonymous"></script>
 </head>
 
 <body>
-    <header class="navbar">
-        <a href="index.html"><div class="logo">K.</div></a>
-        <div class="heading">ADMIN PANEL</div>
-    </header>
+  <header class="navbar">
+    <a href="index.html">
+      <div class="logo">K.</div>
+    </a>
+    <div class="menu-toggle" onclick="toggleSidebar()">&#9776;</div>
+    <div class="heading">ADMIN PANEL</div>
+  </header>
 
-    <!-- Navigation Links -->
-    <div class="nav">
-        <a href="#" onclick="showSection('scraped-data', event)">Scraped Data</a>
-        <a href="#" onclick="showSection('user-events', event)">User-Entered Events</a>
+  <!-- Sidebar Navigation -->
+  <div class="sidebar" id="sidebar">
+    <div class="menu-items" id="menuItems">
+      <a href="#" onclick="showSection('scraped-data', event)">Scraped Data</a>
+      <a href="#" onclick="showSection('user-events', event)">User-Entered Events</a>
+      <a href="#" onclick="showSection('settings', event)">Settings</a>
     </div>
+  </div>
 
-  <!-- Scraped Data Section -->
-    <section id="scraped-data">
-        <h2>Scraped Data</h2>
-        <div class="feature-grid scraped-content"></div>
-    </section>
+  <!-- Sections -->
+  <section id="scraped-data">
+    <h2>Scraped Data</h2>
+    <div class="feature-grid scraped-content"></div>
+  </section>
 
-    <section id="user-events" style="display: none;">
-        <h2>User-Entered Events</h2>
-        <div class="feature-grid user-events-content"></div>
-    </section>
+  <section id="user-events" style="display: none;">
+    <h2>User-Entered Events</h2>
+    <div class="feature-grid user-events-content"></div>
+  </section>
 
-    <div class="scraped-content"></div>
+  <section id="settings" style="display: none;">
+    <h2>Settings</h2>
+    <p>Settings section content goes here.</p>
+  </section>
 
-    <!-- Firebase Script -->
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getFirestore, collection, getDocs, setDoc, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+  <!-- Firebase and Logic -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import {
+      getFirestore,
+      collection,
+      getDocs,
+      setDoc,
+      deleteDoc,
+      doc
+    } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-        // Firebase Configuration
-        const firebaseConfig = {
-            apiKey: "AIzaSyAx3LcZnN2DSwx-YLdvG7an0Mgnr4NlQXk",
-            authDomain: "event-management-6eab1.firebaseapp.com",
-            projectId: "event-management-6eab1",
-            storageBucket: "event-management-6eab1.firebasestorage.app",
-            messagingSenderId: "792652272458",
-            appId: "1:792652272458:web:0aa7019690d73b7801e7b3"
-        };
+    const firebaseConfig = {
+      apiKey: "AIzaSyAx3LcZnN2DSwx-YLdvG7an0Mgnr4NlQXk",
+      authDomain: "event-management-6eab1.firebaseapp.com",
+      projectId: "event-management-6eab1",
+      storageBucket: "event-management-6eab1.firebasestorage.app",
+      messagingSenderId: "792652272458",
+      appId: "1:792652272458:web:0aa7019690d73b7801e7b3"
+    };
 
-        // Initialize Firebase
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
 
-        async function fetchScrapedData() {
-            const section = document.querySelector(".scraped-content");
-            section.innerHTML = ""; // Clear existing content
+    async function fetchScrapedData() {
+      const section = document.querySelector(".scraped-content");
+      section.innerHTML = "";
+      const querySnapshot = await getDocs(collection(db, "instagram_posts"));
+      querySnapshot.forEach((doc) => {
+        const data = doc.data();
+        const card = document.createElement("div");
+        card.classList.add("feature-card");
+        const imgElement = document.createElement("img");
+        imgElement.src = `data:image/jpeg;base64,${data.image_base64}`;
+        imgElement.classList.add("feature-image");
+        card.addEventListener("click", () => openPopup(data));
+        card.appendChild(imgElement);
+        section.appendChild(card);
+      });
+    }
 
-            const querySnapshot = await getDocs(collection(db, "nasa_scraped_posts"));
-
-            querySnapshot.forEach((doc) => {
-                const data = doc.data();
-
-                // Create feature card
-                const card = document.createElement("div");
-                card.classList.add("feature-card");
-
-                // Create image element
-                const imgElement = document.createElement("img");
-                imgElement.src = `data:image/jpeg;base64,${data.image}`;
-                imgElement.classList.add("feature-image");
-
-                // Add click event to open popup
-                card.addEventListener("click", () => {
-                    openPopup(data);
-                });
-
-                card.appendChild(imgElement);
-                section.appendChild(card);
-            });
-        }
-
-
-
-        async function fetchUserEvents() {
-            const section = document.querySelector(".user-events-content");
-            section.innerHTML = "";
-
-            const querySnapshot = await getDocs(collection(db, "events"));
-            querySnapshot.forEach((docSnap) => {
-                const data = docSnap.data();
-                data.id = docSnap.id; // ✅ Important: get the document ID
-
-                // Create a card
-                const card = document.createElement("div");
-                card.classList.add("feature-card");
-
-                // Create Image Element
-                const imgElement = document.createElement("img");
-                imgElement.src = `data:image/jpeg;base64,${data.event_image_base64}`;
-                imgElement.classList.add("feature-image");
-
-                // Create Event Name
-                const eventName = document.createElement("h3");
-                eventName.textContent = data.event_name;
-                eventName.classList.add("event-name");
-
-                // Append Image and Name
-                card.appendChild(imgElement);
-                card.appendChild(eventName);
-                section.appendChild(card);
-
-                // Click Event to Show Popup
-                card.addEventListener("click", function () {
-                    showEventPopup(data); // now data already has id inside
-                });
-            });
-        }
-
-       
-        // Function to Show Event Popup
-        function showEventPopup(eventData) {
-            const eventId = eventData.id; // ✅ get id directly from eventData
-
-            // Remove existing popups if any
-            const existingPopup = document.querySelector(".event-popup");
-            if (existingPopup) existingPopup.remove();
-
-            // Create Popup Container
-            const popup = document.createElement("div");
-            popup.classList.add("event-popup");
-
-            // Create Popup Content
-            popup.innerHTML = `
-                <div class="popup-content">
-                    <span class="close-btn">&times;</span>
-                    <div class="popup-left">
-                        <img src="data:image/jpeg;base64,${eventData.event_image_base64}" class="popup-image">
-                    </div>
-                    <div class="popup-right">
-                        <h2>${eventData.event_name}</h2>
-                        <p><strong>Location:</strong> ${eventData.college}, ${eventData.city}, ${eventData.state || ''}</p>
-                        <p><strong>Start Date:</strong> ${eventData.start_date || "N/A"}</p>
-                        <p><strong>Contact:</strong> ${eventData.contact_number || "N/A"}</p>
-                        <p><strong>Email:</strong> ${eventData.contact_email || "N/A"}</p>
-                        <p><strong>Event Type:</strong> ${eventData.event_type}</p>
-                        <p><strong>Event Fee:</strong> ${eventData.event_fee || "Free"}</p>
-                        <p><strong>Description:</strong> ${eventData.event_description}</p>
-                        <p><strong>Caption:</strong> ${eventData.event_caption}</p>
-                    </div>
-                </div>
-                <div class="popup-buttons">
-                    <button class="approve-btn">Approve</button>
-                    <button class="decline-btn">Decline</button>
-                </div>
-            `;
-
-            // Close Popup
-            popup.querySelector(".close-btn").addEventListener("click", function () {
-                popup.remove();
-            });
-
-            document.body.appendChild(popup);
-
-            // ✅ Approve Button
-            document.querySelector(".approve-btn").addEventListener("click", async function () {
-                try {
-                    await setDoc(doc(db, "verified_events", eventId), eventData);
-                    await deleteDoc(doc(db, "events", eventId));
-
-                    alert(`Event "${eventData.event_name}" Approved! ✅`);
-                    popup.remove();
-                    location.reload();
-                } catch (error) {
-                    console.error("Error approving event:", error);
-                    alert("Failed to approve event. Try again!");
-                }
-            });
-
-            // ✅ Decline Button
-            document.querySelector(".decline-btn").addEventListener("click", async function () {
-                if (confirm("Are you sure you want to decline (delete) this event? ❌")) {
-                    try {
-                        await deleteDoc(doc(db, "events", eventId));
-                        alert(`Event "${eventData.event_name}" Declined & Deleted! ❌`);
-                        popup.remove();
-                        location.reload();
-                    } catch (error) {
-                        console.error("Error declining event:", error);
-                        alert("Failed to decline event. Try again!");
-                    }
-                }
-            });
-
-        }
-
-            
-
-
-            // ✅ Make functions globally accessible
-        window.fetchScrapedData = fetchScrapedData;
-        window.fetchUserEvents = fetchUserEvents;
-
-        // Load Scraped Data on Page Load
-        document.addEventListener("DOMContentLoaded", function() {
-            fetchScrapedData();
+    async function fetchUserEvents() {
+      const section = document.querySelector(".user-events-content");
+      section.innerHTML = "";
+      const querySnapshot = await getDocs(collection(db, "events"));
+      querySnapshot.forEach((docSnap) => {
+        const data = docSnap.data();
+        data.id = docSnap.id;
+        const card = document.createElement("div");
+        card.classList.add("feature-card");
+        const imgElement = document.createElement("img");
+        imgElement.src = `data:image/jpeg;base64,${data.event_image_base64}`;
+        imgElement.classList.add("feature-image");
+        const eventName = document.createElement("h3");
+        eventName.textContent = data.event_name;
+        eventName.classList.add("event-name");
+        card.appendChild(imgElement);
+        card.appendChild(eventName);
+        section.appendChild(card);
+        card.addEventListener("click", function () {
+          showEventPopup(data);
         });
+      });
+    }
 
-    </script>
-
-    <script>
-        function showSection(sectionId, event) {
-            event.preventDefault(); // Prevent page reload
-
-            // Hide all sections
-            document.getElementById("scraped-data").style.display = "none";
-            document.getElementById("user-events").style.display = "none";
-
-            // Show the selected section
-            document.getElementById(sectionId).style.display = "block";
-
-            // Fetch data if needed
-            if (sectionId === "scraped-data") {
-                fetchScrapedData();
-            } else if (sectionId === "user-events") {
-                fetchUserEvents();  // 🔥 FIX: Now it will call fetchUserEvents()
-            }
+    function showEventPopup(eventData) {
+      const eventId = eventData.id;
+      const existingPopup = document.querySelector(".event-popup");
+      if (existingPopup) existingPopup.remove();
+      const popup = document.createElement("div");
+      popup.classList.add("event-popup");
+      popup.innerHTML = `
+        <div class="popup-content">
+          <span class="close-btn">&times;</span>
+          <div class="popup-left">
+            <img src="data:image/jpeg;base64,${eventData.event_image_base64}" class="popup-image">
+          </div>
+          <div class="popup-right">
+            <h2>${eventData.event_name}</h2>
+            <p><strong>Location:</strong> ${eventData.college}, ${eventData.city}, ${eventData.state || ''}</p>
+            <p><strong>Start Date:</strong> ${eventData.start_date || "N/A"}</p>
+            <p><strong>Contact:</strong> ${eventData.contact_number || "N/A"}</p>
+            <p><strong>Email:</strong> ${eventData.contact_email || "N/A"}</p>
+            <p><strong>Event Type:</strong> ${eventData.event_type}</p>
+            <p><strong>Event Fee:</strong> ${eventData.event_fee || "Free"}</p>
+            <p><strong>Description:</strong> ${eventData.event_description}</p>
+            <p><strong>Caption:</strong> ${eventData.event_caption}</p>
+          </div>
+        </div>
+        <div class="popup-buttons">
+          <button class="approve-btn">Approve</button>
+          <button class="decline-btn">Decline</button>
+        </div>
+      `;
+      popup.querySelector(".close-btn").addEventListener("click", function () {
+        popup.remove();
+      });
+      document.body.appendChild(popup);
+      document.querySelector(".approve-btn").addEventListener("click", async function () {
+        try {
+          await setDoc(doc(db, "verified_events", eventId), eventData);
+          await deleteDoc(doc(db, "events", eventId));
+          alert(`Event "${eventData.event_name}" Approved! ✅`);
+          popup.remove();
+          location.reload();
+        } catch (error) {
+          console.error("Error approving event:", error);
+          alert("Failed to approve event. Try again!");
         }
-    </script>
+      });
+      document.querySelector(".decline-btn").addEventListener("click", async function () {
+        if (confirm("Are you sure you want to decline (delete) this event? ❌")) {
+          try {
+            await deleteDoc(doc(db, "events", eventId));
+            alert(`Event "${eventData.event_name}" Declined & Deleted! ❌`);
+            popup.remove();
+            location.reload();
+          } catch (error) {
+            console.error("Error declining event:", error);
+            alert("Failed to decline event. Try again!");
+          }
+        }
+      });
+    }
 
+    window.fetchScrapedData = fetchScrapedData;
+    window.fetchUserEvents = fetchUserEvents;
+
+    document.addEventListener("DOMContentLoaded", function () {
+      fetchScrapedData();
+    });
+  </script>
+
+<script>
+  function toggleSidebar() {
+    const sidebar = document.getElementById("sidebar");
+    sidebar.classList.toggle("open");
+
+    if (sidebar.classList.contains("open")) {
+      document.addEventListener("click", closeSidebarOnClickOutside);
+    } else {
+      document.removeEventListener("click", closeSidebarOnClickOutside);
+    }
+  }
+
+  function closeSidebarOnClickOutside(event) {
+    const sidebar = document.getElementById("sidebar");
+    const menuToggle = document.querySelector(".menu-toggle");
+
+    // If the click is outside the sidebar and menu button, close it
+    if (!sidebar.contains(event.target) && !menuToggle.contains(event.target)) {
+      sidebar.classList.remove("open");
+      document.removeEventListener("click", closeSidebarOnClickOutside);
+    }
+  }
+
+  function showSection(sectionId, event) {
+    event.preventDefault();
+    const sections = ["scraped-data", "user-events", "settings"];
+    sections.forEach(id => {
+      document.getElementById(id).style.display = "none";
+    });
+    document.getElementById(sectionId).style.display = "block";
+    if (sectionId === "scraped-data") fetchScrapedData();
+    else if (sectionId === "user-events") fetchUserEvents();
+  }
+</script>
 
 </body>
 </html>
