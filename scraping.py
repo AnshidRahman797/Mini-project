@@ -29,7 +29,7 @@ db = firestore.client()
 
 INSTAGRAM_USERNAME = "jude.njuden69"
 INSTAGRAM_PASSWORD = "rogers@13"
-INSTAGRAM_USERNAMES = ["tinkerhub_gecpkd","iedcgecpkd","ieeesbgecpkd"]
+INSTAGRAM_USERNAMES = ["iedcgecpkd","tinkerhub_gecpkd","ieeesbgecpkd"]
 
 def random_delay(min_time=2, max_time=5):
     time.sleep(random.uniform(min_time, max_time))
@@ -217,7 +217,7 @@ def scrape_instagram(driver, usernames):
             try:
                 post_url = post.get_attribute("href")
                 post.click()
-                time.sleep(random.uniform(3, 5))
+                time.sleep(random.uniform(15, 20))
 
                
                 username_elem = driver.find_elements(By.CSS_SELECTOR, "header a[href*='/']")
@@ -242,7 +242,7 @@ def scrape_instagram(driver, usernames):
                     caption = "❌ Caption not found"
 
 
-                image_elem = driver.find_elements(By.XPATH, "//img[contains(@class, 'x5yr21d')]")
+                image_elem = driver.find_elements(By.XPATH, "//article//img")
                 image_url = image_elem[0].get_attribute("src") if image_elem else "❌ Image not found"
                 
                 if image_url != "❌ Image not found":
@@ -268,7 +268,7 @@ def scrape_instagram(driver, usernames):
                     "post_url": post_url
                 }
 
-                print("🔎 DEBUG: Extracted post data:", post_data)
+                
                 scraped_data.append(post_data)
 
                 driver.find_element(By.XPATH, "//body").send_keys(Keys.ESCAPE)
