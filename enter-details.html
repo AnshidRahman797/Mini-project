@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Event Registration Form</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #fff;
+      margin: 0;
+      padding: 40px;
+      display: flex;
+      justify-content: center;
+    }
+    .container {
+      width: 100%;
+      max-width: 1100px;
+    }
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .event-header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    .event-header img {
+      max-width: 200px;
+      border-radius: 10px;
+    }
+    .event-header .caption {
+      font-size: 18px;
+      margin-top: 10px;
+    }
+    form {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      justify-content: space-between;
+    }
+    .form-group {
+      flex: 1 1 30%;
+      display: flex;
+      flex-direction: column;
+    }
+    .form-group.full-width {
+      flex: 1 1 100%;
+    }
+    label {
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+    input, select, textarea {
+      padding: 10px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    textarea {
+      resize: vertical;
+      min-height: 100px;
+    }
+    .form-actions {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      margin-top: 30px;
+    }
+    button {
+      width: 100%;
+      padding: 12px;
+      font-size: 16px;
+      border: none;
+      border-radius: 5px;
+      background-color: black;
+      color: white;
+      cursor: pointer;
+    }
+    .exit-btn {
+      background-color: gray;
+    }
+    .exit-cross {
+  position: absolute;
+  top: 20px;
+  right: 30px;
+  font-size: 28px;
+  font-weight: bold;
+  color: #333;
+  cursor: pointer;
+  z-index: 1000;
+}
+.exit-cross:hover {
+  color: red;
+}
+
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="exit-cross" onclick="window.location.href='/admin#scraped-data'">
+
+      &times;
+    </div>
+    
+    <div class="event-header">
+      <img src="" alt="Event Image">
+      <div class="caption"></div>    
+        
+    </div>
+
+    <h2>Event Registration Form</h2>
+
+    <form action="/submit_verified_event" method="POST">
+      <div class="form-group">
+        <label>Event Name: *</label>
+        <input type="text" name="event_name" required>
+      </div>
+
+      <div class="form-group">
+        <label>Event Caption: *</label>
+        <input type="text" name="event_caption" required>
+      </div>
+
+      <div class="form-group">
+        <label>Event Type: *</label>
+        <select name="event_type" required>
+          <option value="">Select Event Type</option>
+          <option value="Workshop">Workshop</option>
+          <option value="Seminar">Seminar</option>
+          <option value="Hackathon">Hackathon</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Event Fee:</label>
+        <input type="text" name="event_fee">
+      </div>
+
+      <div class="form-group">
+        <label>Start Date: *</label>
+        <input type="date" name="start_date" required>
+      </div>
+
+      <div class="form-group">
+        <label>End Date: *</label>
+        <input type="date" name="end_date" required>
+      </div>
+
+      <div class="form-group">
+        <label>Country: *</label>
+        <input type="text" name="country" value="India" required>
+      </div>
+
+      <div class="form-group">
+        <label>State: *</label>
+        <select name="state" required>
+          <option value="">Select State</option>
+          <!-- add states here -->
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>City: *</label>
+        <select name="city" required>
+          <option value="">Select City</option>
+          <!-- add cities here -->
+        </select>
+      </div>
+
+      <div class="form-group full-width">
+        <label>College: *</label>
+        <select name="college" required>
+          <option value="">Select College</option>
+          <!-- add colleges here -->
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Contact Email: *</label>
+        <input type="email" name="contact_email" required>
+      </div>
+
+      <div class="form-group">
+        <label>Contact Number: *</label>
+        <input type="text" name="contact_number" required>
+      </div>
+
+      <div class="form-group full-width">
+        <label>Event Description:</label>
+        <textarea name="event_description"></textarea>
+      </div>
+
+      <div class="form-actions">
+        <button type="submit">Submit</button>
+        <button type="button" class="exit-btn" onclick="window.location.href='/admin'">Exit</button>
+      </div>
+    </form>
+  </div>
+  <script>
+    // Existing code
+    const params = new URLSearchParams(window.location.search);
+    const imageUrl = params.get("image_url");
+    const caption = params.get("caption");
+  
+    if (imageUrl) {
+      document.querySelector(".event-header img").src = imageUrl;
+    }
+  
+    if (caption) {
+      document.querySelector(".event-header .caption").textContent = caption;
+      document.querySelector('input[name="event_caption"]').value = caption;
+    }
+  
+    // Also save the image URL to a hidden input if needed
+    if (imageUrl) {
+      const hiddenInput = document.createElement('input');
+      hiddenInput.type = 'hidden';
+      hiddenInput.name = 'image_url';
+      hiddenInput.value = imageUrl;
+      document.querySelector("form").appendChild(hiddenInput);
+    }
+  </script>
+  
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const imageUrl = params.get("image_url");
+    const caption = params.get("caption");
+  
+    console.log("Image URL:", imageUrl); // 🔍 DEBUG
+    console.log("Caption:", caption);    // 🔍 DEBUG
+  
+    if (imageUrl) {
+      document.querySelector(".event-header img").src = imageUrl;
+    }
+  
+    if (caption) {
+      document.querySelector(".event-header .caption").textContent = caption;
+      document.querySelector('input[name="event_caption"]').value = caption;
+    }
+  
+    // Optional: Send image to server via hidden input
+    if (imageUrl) {
+      const hiddenInput = document.createElement('input');
+      hiddenInput.type = 'hidden';
+      hiddenInput.name = 'image_url';
+      hiddenInput.value = imageUrl;
+      document.querySelector("form").appendChild(hiddenInput);
+    }
+    
+  </script>
+  
+  
+</body>
+</html>
