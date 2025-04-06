@@ -67,21 +67,70 @@
     const db = getFirestore(app);
 
     async function fetchScrapedData() {
-      const section = document.querySelector(".scraped-content");
-      section.innerHTML = "";
-      const querySnapshot = await getDocs(collection(db, "instagram_posts"));
-      querySnapshot.forEach((doc) => {
-        const data = doc.data();
-        const card = document.createElement("div");
-        card.classList.add("feature-card");
-        const imgElement = document.createElement("img");
-        imgElement.src = `data:image/jpeg;base64,${data.image_base64}`;
-        imgElement.classList.add("feature-image");
-        card.addEventListener("click", () => openPopup(data));
-        card.appendChild(imgElement);
-        section.appendChild(card);
+  const section = document.querySelector(".scraped-content");
+  section.innerHTML = "";
+
+  const querySnapshot = await getDocs(collection(db, "instagram_posts"));
+  
+  querySnapshot.forEach((docSnap) => {
+    const data = docSnap.data();
+    const docId = docSnap.id;
+
+    if (!data.image_base64 || data.image_base64.length < 100) return; // skip broken images
+
+    const card = document.createElement("div");
+    card.classList.add("feature-card");
+
+    card.innerHTML = `
+      <div class="image-wrapper">
+        <img src="data:image/jpeg;base64,${data.image_base64}" class="feature-image" />
+        <div class="dot-menu-wrapper">
+          <div class="dot-menu">&#8942;</div>
+          <div class="dot-dropdown hidden">
+            <div class="dropdown-item" data-id="${docId}" data-action="enter">Enter</div>
+            <div class="dropdown-item" data-id="${docId}" data-action="delete">Delete</div>
+          </div>
+        </div>
+      </div>
+    `;
+
+    // Attach dropdown logic
+    const menuWrapper = card.querySelector(".dot-menu-wrapper");
+    const dropdownItems = card.querySelectorAll(".dropdown-item");
+
+    menuWrapper.querySelector(".dot-menu").addEventListener("click", (e) => {
+      e.stopPropagation();
+      document.querySelectorAll(".dot-dropdown").forEach(d => d.classList.add("hidden"));
+      menuWrapper.querySelector(".dot-dropdown").classList.toggle("hidden");
+    });
+
+    dropdownItems.forEach(item => {
+      item.addEventListener("click", async (e) => {
+        const action = e.target.dataset.action;
+        const id = e.target.dataset.id;
+
+        if (action === "enter") {
+  const img = encodeURIComponent(`data:image/jpeg;base64,${data.image_base64}`);
+  const cap = encodeURIComponent(data.caption || "");
+  window.location.href = `enter-details.html?image_url=${img}&caption=${cap}`;
+}else if (action === "delete") {
+          if (confirm("Are you sure you want to delete this post?")) {
+            await deleteDoc(doc(db, "instagram_posts", id));
+            alert("Deleted!");
+            fetchScrapedData();
+          }
+        }
       });
-    }
+    });
+
+    section.appendChild(card);
+  });
+
+  document.addEventListener("click", () => {
+    document.querySelectorAll(".dot-dropdown").forEach(d => d.classList.add("hidden"));
+  });
+}
+
 
     async function fetchUserEvents() {
       const section = document.querySelector(".user-events-content");
