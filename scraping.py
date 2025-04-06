@@ -29,7 +29,7 @@ db = firestore.client()
 
 INSTAGRAM_USERNAME = "jude.njuden69"
 INSTAGRAM_PASSWORD = "rogers@13"
-INSTAGRAM_USERNAMES = ["tinkerhub_gecpkd","iedcgecpkd","ieeesbgecpkd"]
+INSTAGRAM_USERNAMES = ["iedcgecpkd","tinkerhub_gecpkd","ieeesbgecpkd"]
 
 def random_delay(min_time=2, max_time=5):
     time.sleep(random.uniform(min_time, max_time))
@@ -41,6 +41,7 @@ def setup_driver():
     chrome_options.add_argument("--disable-dev-shm-usage")  
     chrome_options.add_argument("--disable-blink-features=AutomationControlled")  
     chrome_options.add_argument("--disable-popup-blocking")
+    chrome_options.add_argument("--incognito")
     chrome_options.add_argument(
         "user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
     )
@@ -49,6 +50,17 @@ def setup_driver():
     driver.execute_script("Object.defineProperty(navigator, 'webdriver', {get: () => undefined})")
     return driver
 
+def click_popup_button(possible_texts):
+    for text in possible_texts:
+        try:
+            xpath = f"//button[contains(text(), '{text}')]"
+            button = wait.until(EC.element_to_be_clickable((By.XPATH, xpath)))
+            button.click()
+            print(f"✅ Clicked popup button with text: '{text}'")
+            return True
+        except:
+            continue
+    return False
 def instagram_login(driver, username, password):
     driver.get("https://www.instagram.com/accounts/login/")
 
@@ -71,20 +83,14 @@ def instagram_login(driver, username, password):
         EC.presence_of_element_located((By.XPATH, "//div[contains(@class, 'x1iyjqo2')]"))
     )
 
-    time.sleep(5) 
-    try:
-        not_now_button = driver.find_element(By.XPATH, "//button[text()='Not now']")
-        not_now_button.click()
-        print("Clicked 'Not now' button.")
-    except:
-        print("No 'Not now' button found.")
+    time.sleep(15) 
+    wait = WebDriverWait(driver, 15)
+    if not click_popup_button(['Not now', 'Not Now', 'Save Info', 'Remind me later']):
+        print("❌ 'Not now' button not found.")
 
-    try:
-        never_button = driver.find_element(By.XPATH, "//button[text()='Never']")
-        never_button.click()
-        print("Clicked 'Never' button.")
-    except:
-        print("No 'Never' button found.")
+# Try for "Never" (Notification pop-up)
+    if not click_popup_button(['Never', 'Not now', 'No thanks']):
+        print("❌ 'Never' button not found.")
 
     print("✅ Instagram login successful!")
     return True 
@@ -121,37 +127,6 @@ def scroll_and_like_posts(driver):
         except Exception as e:
             print(f"❌ Error liking post: {e}")
             time.sleep(1)
-        
-
-def human_scroll(driver, min_scroll=2, max_scroll=5):
-    """Simulates human-like scrolling behavior"""
-    for _ in range(random.randint(min_scroll, max_scroll)):
-        scroll_distance = random.randint(300, 800)
-        driver.execute_script(f"window.scrollBy(0, {scroll_distance});")
-        time.sleep(random.uniform(1.5, 3))
-
-def human_mouse_movement(driver):
-    """Simulates human-like mouse movements within browser window"""
-    actions = ActionChains(driver)
-
-    driver.maximize_window()
-    time.sleep(2) 
-
-    window_size = driver.get_window_size()
-    max_x = window_size["width"] - 100  
-    max_y = window_size["height"] - 100
-
-    for _ in range(random.randint(3, 6)):  
-        x = random.randint(10, max_x)
-        y = random.randint(10, max_y)
-        
-        actions.move_by_offset(x - driver.get_window_rect()["x"], 
-                               y - driver.get_window_rect()["y"]).perform()
-        time.sleep(random.uniform(0.5, 1.5))  
-def human_scroll(driver):
-    for _ in range(random.randint(2, 4)):
-        driver.execute_script("window.scrollBy(0, 300);")
-        time.sleep(random.uniform(2, 4))  
 
 def scrape_instagram(driver, usernames):
     print(len(usernames))
@@ -217,33 +192,51 @@ def scrape_instagram(driver, usernames):
             try:
                 post_url = post.get_attribute("href")
                 post.click()
-                time.sleep(random.uniform(3, 5))
+                time.sleep(random.uniform(15, 20))
 
                
                 username_elem = driver.find_elements(By.CSS_SELECTOR, "header a[href*='/']")
                 username = username_elem[0].text.strip() if username_elem else "❌ Username not found"
 
                 try:
-                    caption_xpath = (
-                        "//h1 | "
-                        "//div[contains(@class, 'x1i10hfl')]/span | "
-                        "//div[contains(@class, '_a9zs')]/span | "
-                        "//div[contains(@class, '_aacl')]/span | "
-                        "//div[contains(@class, '_aagv')]/span | "
-                        "//div[contains(@class, 'x1lliihq')]/span | "
-                        "//div[contains(@class, 'x1gslohp')]/span | "
-                        "//div[contains(@class, 'x1a2a7pz')]/span | "
-                        "//div[contains(@class, 'x1jx94hy')]/span"
-                    )
+                    caption_xpath_list = [
+                        "//h1",
+                        "//div[contains(@class, 'x1i10hfl')]/span",
+                        "//div[contains(@class, '_a9zs')]/span",
+                        "//div[contains(@class, '_aacl')]/span",
+                        "//div[contains(@class, '_aagv')]/span",
+                        "//div[contains(@class, 'x1lliihq')]/span",
+                        "//div[contains(@class, 'x1gslohp')]/span",
+                        "//div[contains(@class, 'x1a2a7pz')]/span",
+                        "//div[contains(@class, 'x1jx94hy')]/span",
+                        "//div[@role='dialog']//h1",
+                        "//div[@role='dialog']//span",
+                        "//div[@role='dialog']//div[contains(@class, 'x1i10hfl')]/span",
+                        "//div[@role='dialog']//ul[contains(@class, '_a9zj')]//span"
+                    ]
 
-                    caption_elem = driver.find_element(By.XPATH, caption_xpath)
-                    caption = caption_elem.text.strip() if caption_elem else "❌ Caption not found"
-                except:
+                    caption = None
+                    wait = WebDriverWait(driver, 10)
+                    for xpath in caption_xpath_list:
+                        elements = wait.until(EC.presence_of_all_elements_located((By.XPATH, xpath)))
+                        for elem in elements:
+                            text = elem.text.strip()
+                            if text:
+                                caption = text
+                                break
+                        if caption:
+                            break
+
+                    if not caption:
+                        caption = "❌ Caption not found"
+
+                except Exception as e:
                     caption = "❌ Caption not found"
 
 
-                image_elem = driver.find_elements(By.XPATH, "//img[contains(@class, 'x5yr21d')]")
+                image_elem= driver.find_elements(By.XPATH, "//article//img")
                 image_url = image_elem[0].get_attribute("src") if image_elem else "❌ Image not found"
+                
                 
                 if image_url != "❌ Image not found":
                     try:
@@ -268,7 +261,6 @@ def scrape_instagram(driver, usernames):
                     "post_url": post_url
                 }
 
-                print("🔎 DEBUG: Extracted post data:", post_data)
                 scraped_data.append(post_data)
 
                 driver.find_element(By.XPATH, "//body").send_keys(Keys.ESCAPE)
