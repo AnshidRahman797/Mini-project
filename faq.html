@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FAQs</title>
+</head>
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const faqItems = document.querySelectorAll(".faq-question");
+        faqItems.forEach(btn => {
+            btn.addEventListener("click", () => {
+            const answer = btn.nextElementSibling;
+            answer.style.display = answer.style.display === "block" ? "none" : "block";
+            });
+        });
+        });
+</script>
+
+<style>
+    .faq-section {
+    background: #f8f9fa;
+    padding: 60px 20px;
+    text-align: center;
+    }
+
+    .faq-title {
+    font-size: 2.5rem;
+    margin-bottom: 30px;
+    color: #333;
+    }
+
+    .faq-container {
+    max-width: 800px;
+    margin: 0 auto;
+    text-align: left;
+    }
+
+    .faq-item {
+    border-bottom: 1px solid #ddd;
+    margin-bottom: 10px;
+    }
+
+    .faq-question {
+    background: none;
+    border: none;
+    width: 100%;
+    text-align: left;
+    padding: 15px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    cursor: pointer;
+    color: #007bff;
+    transition: background 0.2s ease;
+    }
+
+    .faq-question:hover {
+    background: #e9ecef;
+    }
+
+    .faq-answer {
+    padding: 0 15px 15px;
+    display: none;
+    color: #444;
+    font-size: 0.95rem;
+    }
+
+</style>
+
+<body>
+    <section class="faq-section" id="faq">
+        <h2 class="faq-title">Frequently Asked Questions</h2>
+        <div class="faq-container">
+      
+          <div class="faq-item">
+            <button class="faq-question">How can I register for an event?</button>
+            <div class="faq-answer">
+              <p>You can register by clicking on the event and selecting the “Register Now” button. This will redirect you to the event’s official registration link.</p>
+            </div>
+          </div>
+      
+          <div class="faq-item">
+            <button class="faq-question">Are all the events free to attend?</button>
+            <div class="faq-answer">
+              <p>No, some events may have registration fees. The amount and payment instructions will be mentioned in the event details.</p>
+            </div>
+          </div>
+      
+          <div class="faq-item">
+            <button class="faq-question">How do I know if an event is verified?</button>
+            <div class="faq-answer">
+              <p>Verified events are marked with a badge and are posted after manual verification by our team.</p>
+            </div>
+          </div>
+      
+          <div class="faq-item">
+            <button class="faq-question">Can I host or submit my event on this platform?</button>
+            <div class="faq-answer">
+              <p>Yes! You can submit your event through the "Submit Event" page. After review, it will be listed if approved.</p>
+            </div>
+          </div>
+      
+          <div class="faq-item">
+            <button class="faq-question">Is login required to view events?</button>
+            <div class="faq-answer">
+              <p>No login is required to view events. However, registering or submitting an event might require an account.</p>
+            </div>
+          </div>
+      
+          <div class="faq-item">
+            <button class="faq-question">How can I contact the event organizer?</button>
+            <div class="faq-answer">
+              <p>Each event page has the organizer’s contact number and email under the "Contact Info" section.</p>
+            </div>
+          </div>
+      
+        </div>
+      </section>
+      
+</body>
+</html>

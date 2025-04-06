@@ -48,7 +48,7 @@ body {
     padding: 5px 10px;
     background-color: #d9d6c3;
     width: 450px;
-    max-width: 100%; 
+    max-width: 100%;
 }
 
 .search-container input {
@@ -125,40 +125,43 @@ body {
     justify-content: center;
     align-items: center;
     padding: 40px 0;
-    position: relative; 
-}
-
-.featured-image {
-    width: 98.5%;
-    max-width: 1200px;
-    height: auto;
-    border-radius: 10px;
-    filter: blur(15px); /* Blurred background */
-    position: absolute;
-    z-index: -1; /* Sends it to the back */
-}
-
-.image-container {
+  }
+  
+  .image-container {
     position: relative;
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 500px; /* Adjust as needed */
-    height: 340px; /* Adjust as needed */
-    background-color: #d9d6c3; /* White background */
-    border: 20px solid #d9d6c3; /* White border around the image */
+    width: 500px;
+    height: 340px;
+    background-color: #d9d6c3;
+    border: 20px solid #d9d6c3;
     border-radius: 3px;
-}
-
-.mini-image {
-    width: 100%; /* Full width */
-    height: 100%; /* Full height */
-    object-fit: cover; /* Keeps the image in correct aspect ratio */
+    overflow: hidden; /* Ensures the blurred image doesn't overflow */
+  }
+  
+  .featured-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: blur(15px);
+    z-index: 1;
+  }
+  
+  .mini-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
     border-radius: 3px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Optional shadow */
-}
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    z-index: 2;
+    position: relative;
+  }  
 
-
+  
 @media (max-width: 768px) {
     .navbar {
         flex-direction: column;
@@ -466,6 +469,7 @@ body {
     min-width: 500px; /* Increased width for a better look */
     max-width: 700px; /* Ensuring it doesn’t get too big */
     width: 90%; /* Responsive */
+    z-index: 3;
 }
 
 /* Navigation List */
@@ -679,3 +683,36 @@ body {
         margin-top: 20px;
     }
 }
+
+
+.popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0,0,0,0.8);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+  }
+  
+  .popup-content {
+    background-color: white;
+    padding: 20px;
+    width: 90%;
+    max-width: 600px;
+    border-radius: 12px;
+    overflow-y: auto;
+    max-height: 90vh;
+    color: #333;
+  }
+  
+  .popup-content img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    margin-bottom: 10px;
+  }
+  

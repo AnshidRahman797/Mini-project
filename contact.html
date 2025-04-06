@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact</title>
+</head>
+
+<style>
+    .contact-section {
+  background-color: #f9f9f9;
+  padding: 80px 20px;
+  text-align: center;
+}
+
+.contact-container {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.contact-title {
+  font-size: 2.5rem;
+  font-weight: bold;
+  margin-bottom: 10px;
+  color: #222;
+}
+
+.contact-subtitle {
+  font-size: 1.1rem;
+  color: #666;
+  margin-bottom: 40px;
+}
+
+.contact-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 40px;
+}
+
+.contact-form {
+  flex: 1 1 45%;
+  display: flex;
+  flex-direction: column;
+}
+
+.contact-form input,
+.contact-form textarea {
+  margin-bottom: 20px;
+  padding: 12px 15px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 1rem;
+}
+
+.contact-form button {
+  padding: 12px;
+  background-color: #007bff;
+  border: none;
+  color: #fff;
+  border-radius: 6px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.contact-form button:hover {
+  background-color: #0056b3;
+}
+
+.contact-info {
+  flex: 1 1 45%;
+  text-align: left;
+  font-size: 1rem;
+  color: #444;
+}
+
+.contact-info a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+.contact-info a:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+  .contact-grid {
+    flex-direction: column;
+  }
+}
+
+</style>
+
+<script>
+    document.getElementById("contactForm").addEventListener("submit", function (e) {
+      e.preventDefault();
+      alert("Thank you for your message! We'll get back to you shortly.");
+      this.reset(); // Clears the form
+    });
+</script>
+  
+
+<body>
+    <section class="contact-section" id="contact">
+        <div class="contact-container">
+          <h1 class="contact-title">Contact Us</h1>
+          <p class="contact-subtitle">We’d love to hear from you — drop us a message!</p>
+      
+          <div class="contact-grid">
+            <!-- Contact Form -->
+            <form class="contact-form" id="contactForm">
+              <input type="text" name="name" placeholder="Your Name" required />
+              <input type="email" name="email" placeholder="Your Email" required />
+              <textarea name="message" rows="5" placeholder="Your Message" required></textarea>
+              <button type="submit">Send Message</button>
+            </form>
+      
+            <!-- Contact Info -->
+            <div class="contact-info">
+              <h3>📍 Reach Us</h3>
+              <p><strong>Email:</strong> <a href="mailto:eventmanager.support@gmail.com">eventmanager.support@gmail.com</a></p>
+              <p><strong>Instagram:</strong> <a href="https://instagram.com/youreventpage" target="_blank">@youreventpage</a></p>
+              <p><strong>Location:</strong> Palakkad, Kerala</p>
+            </div>
+          </div>
+        </div>
+      </section>
+      
+</body>
+</html>

@@ -2,6 +2,7 @@ from flask import Flask, request, jsonify, send_file
 import firebase_admin
 from firebase_admin import credentials, auth, firestore
 from flask_cors import CORS
+import base64
 
 app = Flask(__name__)  # No need for templates folder
 CORS(app, resources={r"/*": {"origins": "*"}})  # Enable CORS for frontend requests

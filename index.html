@@ -6,23 +6,290 @@
     <title>Kampus Connect</title>
     <link rel="stylesheet" href="styles.css">
     <script src="https://kit.fontawesome.com/ab05a6b4fa.js" crossorigin="anonymous"></script>
+  
+    <!-- Firebase SDKs -->
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js"></script>
+
+<!-- Firebase App (core SDK) -->
+<script src="https://www.gstatic.com/firebasejs/9.6.11/firebase-app-compat.js"></script>
+
+<!-- Firestore SDK -->
+<script src="https://www.gstatic.com/firebasejs/9.6.11/firebase-firestore-compat.js"></script>
+
+<script>
+    // Your Firebase config
+    const firebaseConfig = {
+      apiKey: "AIzaSyAx3LcZnN2DSwx-YLdvG7an0Mgnr4NlQXk",
+      authDomain: "event-management-6eab1.firebaseapp.com",
+      projectId: "event-management-6eab1",
+      storageBucket: "event-management-6eab1.appspot.com",
+      messagingSenderId: "792652272458",
+      appId: "1:792652272458:web:0aa7019690d73b7801e7b3"
+    };
+  
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+  
+    async function loadRandomEvent() {
+      try {
+        const snapshot = await db.collection("verified_events").get();
+        const docs = snapshot.docs;
+  
+        if (docs.length === 0) return;
+  
+        // Display single random event in main and mini image
+        const randomDoc = docs[Math.floor(Math.random() * docs.length)];
+        const data = randomDoc.data();
+  
+        const titleEl = document.getElementById("event-title");
+        const dateEl = document.getElementById("event-date");
+        const mainImage = document.getElementById("main-image");
+        const miniImage = document.getElementById("mini-image");
+  
+        if (titleEl) titleEl.textContent = data.event_name || "Untitled Event";
+        if (dateEl) dateEl.textContent = data.start_date || "TBA";
+  
+        const base64Prefix = "data:image/jpeg;base64,";
+        const imageSrc = data.event_image_base64 ? `${base64Prefix}${data.event_image_base64}` : "fallback.jpg";
+  
+        if (mainImage) mainImage.src = imageSrc;
+        if (miniImage) miniImage.src = imageSrc;
+  
+        const miniImageContainer = document.getElementById("miniImageContainer");
+  
+        // ALSO: Display 6 random event cards below
+        loadRandomEventCards(docs);
+        loadWorkshopEventCards(docs);
+        loadHackathonEventCards(docs);
+
+
+  
+      } catch (error) {
+        console.error("Error loading event:", error);
+      }
+    }
+  
+    function renderEventCard(eventData) {
+      const container = document.createElement("div");
+      container.className = "feature-container";
+      container.onclick = () => openPopup({
+        title: eventData.event_name,
+        description: eventData.event_caption,
+        imageUrl: `data:image/jpeg;base64,${eventData.event_image_base64}`,
+        date: new Date(eventData.start_date).toDateString(),
+        collegeName: eventData.college,
+        collegeLocation: `${eventData.city}, ${eventData.state}`,
+        contactNumber: eventData.contact_number || "N/A",
+        contactEmail: eventData.contact_email || "N/A",
+        registrationFee: eventData.event_fee || "N/A",
+        registrationLink: eventData.registration_link || "#",
+        eventDescription: eventData.event_description || ""
+      });
+  
+      container.innerHTML = `
+        <div class="feature-card">
+          <span class="feature-hover-text">${eventData.event_caption}</span>
+          <img src="data:image/jpeg;base64,${eventData.event_image_base64}" alt="${eventData.event_name}">
+        </div>
+        <div class="feature-details">
+          <h3 class="feature-title">${eventData.event_name}</h3>
+          <p class="feature-author">on&nbsp;&nbsp;&nbsp;<strong>${new Date(eventData.start_date).toDateString()}</strong></p>
+        </div>
+      `;
+  
+      document.querySelector(".feature-grid").appendChild(container);
+    }
+  
+    function loadRandomEventCards(allDocs) {
+      if (!Array.isArray(allDocs)) return;
+  
+      const events = allDocs.map(doc => doc.data());
+      events.sort(() => 0.5 - Math.random()); // shuffle
+      const selected = events.slice(0, 6);
+  
+      const featureGrid = document.querySelector(".feature-grid");
+      if (featureGrid) {
+        featureGrid.innerHTML = ""; // Clear any existing
+        selected.forEach(renderEventCard);
+      }
+    }
+
+    function loadWorkshopEventCards(allDocs) {
+        if (!Array.isArray(allDocs)) return;
+
+        const workshops = allDocs
+            .map(doc => doc.data())
+            .filter(event => event.event_type?.toLowerCase() === "workshop");
+
+        workshops.sort(() => 0.5 - Math.random()); // shuffle
+        const selected = workshops.slice(0, 6);
+
+        const workshopGrid = document.getElementById("workshop-grid");
+        if (workshopGrid) {
+            workshopGrid.innerHTML = ""; // Clear any existing
+            selected.forEach(eventData => {
+            const container = document.createElement("div");
+            container.className = "feature-container";
+            container.onclick = () => openPopup({
+                title: eventData.event_name,
+                description: eventData.event_caption,
+                imageUrl: `data:image/jpeg;base64,${eventData.event_image_base64}`,
+                date: new Date(eventData.start_date).toDateString(),
+                collegeName: eventData.college,
+                collegeLocation: `${eventData.city}, ${eventData.state}`,
+                contactNumber: eventData.contact_number || "N/A",
+                contactEmail: eventData.contact_email || "N/A",
+                registrationFee: eventData.event_fee || "N/A",
+                registrationLink: eventData.registration_link || "#",
+                eventDescription: eventData.event_description || ""
+            });
+
+            container.innerHTML = `
+                <div class="feature-card">
+                <span class="feature-hover-text">${eventData.event_caption}</span>
+                <img src="data:image/jpeg;base64,${eventData.event_image_base64}" alt="${eventData.event_name}">
+                </div>
+                <div class="feature-details">
+                <h3 class="feature-title">${eventData.event_name}</h3>
+                <p class="feature-author">on&nbsp;&nbsp;&nbsp;<strong>${new Date(eventData.start_date).toDateString()}</strong></p>
+                </div>
+            `;
+
+            workshopGrid.appendChild(container);
+            });
+        }
+        }
+
+        function loadHackathonEventCards(allDocs) {
+            if (!Array.isArray(allDocs)) return;
+
+            const hackathons = allDocs
+                .map(doc => doc.data())
+                .filter(event => event.event_type?.toLowerCase() === "hackathon");
+
+            hackathons.sort(() => 0.5 - Math.random()); // shuffle
+            const selected = hackathons.slice(0, 6);
+
+            const hackathonGrid = document.getElementById("hackathon-grid");
+            if (hackathonGrid) {
+                hackathonGrid.innerHTML = ""; // Clear any existing
+                selected.forEach(eventData => {
+                const container = document.createElement("div");
+                container.className = "feature-container";
+                container.onclick = () => openPopup({
+                    title: eventData.event_name,
+                    description: eventData.event_caption,
+                    imageUrl: `data:image/jpeg;base64,${eventData.event_image_base64}`,
+                    date: new Date(eventData.start_date).toDateString(),
+                    collegeName: eventData.college,
+                    collegeLocation: `${eventData.city}, ${eventData.state}`,
+                    contactNumber: eventData.contact_number || "N/A",
+                    contactEmail: eventData.contact_email || "N/A",
+                    registrationFee: eventData.event_fee || "N/A",
+                    registrationLink: eventData.registration_link || "#",
+                    eventDescription: eventData.event_description || ""
+                });
+
+                container.innerHTML = `
+                    <div class="feature-card">
+                    <span class="feature-hover-text">${eventData.event_caption}</span>
+                    <img src="data:image/jpeg;base64,${eventData.event_image_base64}" alt="${eventData.event_name}">
+                    </div>
+                    <div class="feature-details">
+                    <h3 class="feature-title">${eventData.event_name}</h3>
+                    <p class="feature-author">on&nbsp;&nbsp;&nbsp;<strong>${new Date(eventData.start_date).toDateString()}</strong></p>
+                    </div>
+                `;
+
+                hackathonGrid.appendChild(container);
+                });
+            }
+            }
+    document.addEventListener("DOMContentLoaded", loadRandomEvent);
+
+    document.addEventListener("DOMContentLoaded", function () {
+        let isLoggedIn = localStorage.getItem("isLoggedIn");
+        let loginButton = document.querySelector(".auth-buttons a[href='login.html']");
+        let signupButton = document.querySelector(".auth-buttons a[href='signup.html']");
+        let profileIcon = document.getElementById("profileIcon");
+        let logoutButton = document.getElementById("logoutButton");
+        let createEventLink = document.getElementById("createEventLink");
+        let viewEventsLink = document.getElementById("viewEventsLink");
+        let viewWorkshopLink = document.getElementById("viewWorkshopLink");
+        let viewHackathonLink = document.getElementById("viewHackathonLink");
+        let explorebox = document.getElementById("explore-box");
+        let searchbox = document.getElementById("search-box2");
+
+
+        // ✅ Ensure elements exist before modifying them
+        if (!loginButton || !signupButton || !profileIcon || !logoutButton || !createEventLink) {
+            console.error("One or more elements not found!");
+            return;
+        }
+
+        // ✅ Set default visibility
+        loginButton.style.display = "inline-block";
+        signupButton.style.display = "inline-block";
+        profileIcon.style.display = "none";
+        logoutButton.style.display = "none";
+
+        // ✅ Login logic
+        if (isLoggedIn === "true") {
+            console.log("User is logged in");
+            loginButton.style.display = "none";
+            signupButton.style.display = "none";
+            profileIcon.style.display = "block";
+            logoutButton.style.display = "inline-block";
+            createEventLink.href = "createevent.html"; // 🔹 Set correct link when logged in
+            viewEventsLink.href = "events.html";
+            explorebox.href = "events.html";
+            searchbox.href ="events.html";
+            viewWorkshopLink.href = "events.html?filter=Workshop";
+            viewHackathonLink.href = "events.html?filter=Hackathon";
+            createEventLink.style.display = "block";    // Show button
+        } else {
+            console.log("User is NOT logged in");
+            createEventLink.href = "login.html";        // 🔹 Redirect to login if not logged in
+            viewEventsLink.href = "login.html";
+            viewWorkshopLink.href = "login.html";
+            viewHackathonLink.href = "login.html";
+            explorebox.href = "signup.html";
+            searchbox.href = "signup.html";
+            createEventLink.style.display = "block";    // Show button anyway, but as login
+        }
+
+        // ✅ Logout logic
+        logoutButton.addEventListener("click", function (event) {
+            event.preventDefault();
+            localStorage.removeItem("isLoggedIn");
+            window.location.href = "index.html";
+        });
+    });
+
+
+  </script>
+   
+
 </head>
 <body>
     <header class="navbar" id="home-navbar">
         <div class="logo">K.</div>
         <nav>
             <ul class="nav-links">
-                <li><a href="#" id="explore-box">Explore</a></li>
+                <li><a href="events.html" id="explore-box">Explore</a></li>
                 <li><a href="#feature-events-section">Events</a></li>
-                <li><a href="#">Colleges</a></li>
-                <li><a href="#">Departments</a></li>
-                <li><a href="#feature-workshop-section">Workshops</a></li>
+                <li><a href="#workshop-events-section">Workshops</a></li>
+                <li><a href="#hackathon-events-section">Hackathons</a></li>
             </ul>
         </nav>
+        <a href="events.html" id="search-box2">
         <div class="search-container">
             <input type="text" placeholder="Search for College Events" id="search-box">
             <button id="search-btn"><i class="fas fa-search"></i></button>
         </div>
+        </a>
         <div class="auth-buttons">
             <a href="login.html" id="loginButton">Log in</a>
             <a href="signup.html" id="signupButton">Sign Up</a>
@@ -31,9 +298,8 @@
         <div class="profile-icon" id="profileIcon" style="display: none;">
             <i class="fas fa-user-circle"></i>
         </div>
-           <!-- Create Event Button (Initially Hidden) -->
             <a href="createevent.html" id="createEventLink">
-              <button class="btn-pro">Create Event</button>
+                <button class="btn-pro">Create Event</button>
             </a>
         </div>  
     </header>
@@ -50,32 +316,19 @@
     </section>
 
     <section class="hero">
-        <p class="upcoming">Upcoming event <span class="date" id="current-date"></span></p>
-        <h1 class="title">TECH FEST</h1>
-    </section>
-
-    <section class="image-section">
-        <img src="https://i.ibb.co/R40XmTHp/Screenshot-20-2-2025-215358-www-instagram-com.jpg" 
-             alt="Featured Image" class="featured-image">
-        
-        <div class="image-container" 
-            onclick="openPopup({
-                title: 'TECH FEST',
-                description: 'Special Event',
-                imageUrl: 'https://i.ibb.co/R40XmTHp/Screenshot-20-2-2025-215358-www-instagram-com.jpg',
-                date: '24th March',
-                collegeName: 'GEC Palakkad',
-                collegeLocation: 'Sreekrishnapuram, Palakkad',
-                contactNumber: '9876543210',
-                contactEmail: 'contactemail@gmail.com',
-                registrationFee: '0 Rs',
-                registrationLink: 'googleform.link',
-                eventDescription: 'additional description about the events'
-            })">
-            <img src="https://i.ibb.co/R40XmTHp/Screenshot-20-2-2025-215358-www-instagram-com.jpg" 
-                 alt="Mini Image" class="mini-image">
+        <p class="upcoming">
+          Upcoming event: <span class="date" id="event-date">Loading...</span>
+        </p>
+        <h1 class="title" id="event-title">Loading...</h1>
+      </section>
+      
+      <section class="image-section" id="eventImageSection">
+        <div class="image-container" id="miniImageContainer">
+          <img id="main-image" src="" alt="Featured Image" class="featured-image" />
+          <img id="mini-image" src="" alt="Mini Image" class="mini-image" />
         </div>
-    </section>
+      </section>
+      
     
 
     <section class="hero2" id="feature-events-section">
@@ -84,277 +337,51 @@
     </section>
 
     <section class="feature-section">
-        <div class="feature-grid">
-            <!-- Feature Card 1 -->
-            <div class="feature-container" 
-            onclick="openPopup({
-                title: 'GPL\'25',
-                description: 'Special Event',
-                imageUrl: 'https://i.ibb.co/Ld7T3BHX/Whats-App-Image-2025-02-22-at-14-26-39-594e19db.jpg',
-                date: '24th February',
-                collegeName: 'GEC Palakkad',
-                collegeLocation: 'Sreekrishnapuram, Palakkad',
-                contactNumber: '9876543210',
-                contactEmail: 'contactemail@gmail.com',
-                registrationFee: '0 Rs',
-                registrationLink: 'googleform.link',
-                eventDescription: 'additional description about the events'
-            })">
-                <div class="feature-card">
-                    <span class="feature-hover-text">Special Event</span>
-                    <img src="https://i.ibb.co/Ld7T3BHX/Whats-App-Image-2025-02-22-at-14-26-39-594e19db.jpg" alt="Feature 1">
-                </div>
-                <div class="feature-details">
-                    <h3 class="feature-title">GPL'25</h3>
-                    <p class="feature-author">on&nbsp;&nbsp;&nbsp;<strong>24th February</strong></p>
-                </div>
-            </div>
+        <div class="feature-grid"></div> <!-- For the 6 random events -->
 
-            <!-- Event Popup -->
-            <div class="popup-overlay" id="popupOverlay">
-                <div class="popup-content">
-                    <div class="popup-body">
-                        <img id="popup-image" src="" alt="Event Image">
-                        <div class="popup-details">
-                            <h2 id="popup-title">Placeholder Title</h2>
-                            <p id="popup-description">placeholder description</p>
-                            <p><strong style="color: #737373;">Date: </strong><strong><span id="popup-date"></span></strong></p>
-                            <p><strong style="color: #737373;">College: </strong> <span id="popup-college-name">College name not given</span></p>
-                            <p><strong style="color: #737373;">Location: </strong> <span id="popup-college-location">College location not given</span></p>
-                            <p><strong style="color: #737373;">Contact: </strong> <span id="popup-contact-number">NILL</span></p>
-                            <p><strong style="color: #737373;">Email: </strong> <span id="popup-contact-email">NILL</span></p>
-                            <p><strong style="color: #737373;">Registration Fee:</strong> <span id="popup-registration-fee">NILL</span></p>
-                            <p><strong style="color: #737373;">Registration Link:</strong> <span id="popup-registration-link">NILL</span></p>
-                            <p id="popup-event-description">   </p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-
-
-            <!-- Feature Card 2 -->
-            <div class="feature-container" 
-            onclick="openPopup({
-                title: 'Cricket Tournament',
-                description: 'Special Event',
-                imageUrl: 'https://i.ibb.co/YH0nZ0V/Whats-App-Image-2025-02-22-at-14-26-42-531a91a9.jpg',
-                date: '28th February',
-                collegeName: 'GEC Palakkad',
-                collegeLocation: 'Sreekrishnapuram, Palakkad',
-                contactNumber: '9876543210',
-                contactEmail: 'contactemail@gmail.com',
-                registrationFee: '0 Rs',
-                registrationLink: 'googleform.link',
-                eventDescription: 'additional description about the events'
-            })">
-                <div class="feature-card">
-                    <span class="feature-hover-text">Cricket Tournament</span>
-                    <img src="https://i.ibb.co/YH0nZ0V/Whats-App-Image-2025-02-22-at-14-26-42-531a91a9.jpg" alt="Feature 2">
-                </div>
-                <div class="feature-details">
-                    <h3 class="feature-title">Cricket Tour</h3>
-                    <p class="feature-author">on&nbsp;&nbsp;&nbsp;<strong>28th February</strong></p>
-                </div>
-            </div>
-
-            <!-- Feature Card 3 -->
-            <div class="feature-container" 
-            onclick="openPopup({
-                title: 'MATRIX 2.0',
-                description: 'Special Event',
-                imageUrl: 'https://i.ibb.co/KcZWBLBC/Whats-App-Image-2025-02-22-at-14-32-16-f5a98472.jpg',
-                date: '24-25 January',
-                collegeName: 'GEC Palakkad',
-                collegeLocation: 'Sreekrishnapuram, Palakkad',
-                contactNumber: '9876543210',
-                contactEmail: 'contactemail@gmail.com',
-                registrationFee: '0 Rs',
-                registrationLink: 'googleform.link',
-                eventDescription: 'additional description about the events'
-            })">
-                <div class="feature-card">
-                    <span class="feature-hover-text">MATRIX 2.0</span>
-                    <img src="https://i.ibb.co/KcZWBLBC/Whats-App-Image-2025-02-22-at-14-32-16-f5a98472.jpg" alt="Feature 3">
-                </div>
-                <div class="feature-details">
-                    <h3 class="feature-title">MATRIX 2.0</h3>
-                    <p class="feature-author">on&nbsp;&nbsp;&nbsp;<strong>24-25 January</strong></p>
-                </div>
-            </div>
-
-            <!-- Feature Card 4 -->
-            <div class="feature-container"
-            onclick="openPopup({
-                title: 'EDEN 3.0',
-                description: 'Special Event',
-                imageUrl: 'https://i.ibb.co/r2766zYb/Whats-App-Image-2025-02-22-at-14-37-16-29efee74.jpg',
-                date: '23rd May',
-                collegeName: 'GEC Palakkad',
-                collegeLocation: 'Sreekrishnapuram, Palakkad',
-                contactNumber: '9876543210',
-                contactEmail: 'contactemail@gmail.com',
-                registrationFee: '0 Rs',
-                registrationLink: 'googleform.link',
-                eventDescription: 'additional description about the events'
-            })">
-                <div class="feature-card">
-                    <span class="feature-hover-text">EDEN 3.0</span>
-                    <img src="https://i.ibb.co/r2766zYb/Whats-App-Image-2025-02-22-at-14-37-16-29efee74.jpg" alt="Feature 4">
-                </div>
-                <div class="feature-details">
-                    <h3 class="feature-title">EDEN 3.0</h3>
-                    <p class="feature-author">on&nbsp;&nbsp;&nbsp;<strong>23rd May</strong></p>
-                </div>
-            </div>
-
-            <!-- Feature Card 5 -->
-            <div class="feature-container"
-            onclick="openPopup({
-                title: 'GUITAR',
-                description: 'Special Event',
-                imageUrl: 'https://i.ibb.co/Lzxxm29m/Whats-App-Image-2025-02-22-at-14-37-16-db243eed.jpg',
-                date: '20th April',
-                collegeName: 'GEC Palakkad',
-                collegeLocation: 'Sreekrishnapuram, Palakkad',
-                contactNumber: '9876543210',
-                contactEmail: 'contactemail@gmail.com',
-                registrationFee: '0 Rs',
-                registrationLink: 'googleform.link',
-                eventDescription: 'additional description about the events'
-            })">
-                <div class="feature-card">
-                    <span class="feature-hover-text">GUITAR</span>
-                    <img src="https://i.ibb.co/Lzxxm29m/Whats-App-Image-2025-02-22-at-14-37-16-db243eed.jpg" alt="Feature 5">
-                </div>
-                <div class="feature-details">
-                    <h3 class="feature-title">GUITAR</h3>
-                    <p class="feature-author">on&nbsp;&nbsp;&nbsp;<strong>20th April</strong></p>
-                </div>
-            </div>
-
-            <!-- Feature Card 6 -->
-            <div class="feature-container"
-            onclick="openPopup({
-                title: 'Drums5',
-                description: 'Special Event',
-                imageUrl: 'https://i.ibb.co/jk8sKRtj/Whats-App-Image-2025-02-22-at-14-37-16-dbffedce.jpg',
-                date: '20th April',
-                collegeName: 'GEC Palakkad',
-                collegeLocation: 'Sreekrishnapuram, Palakkad',
-                contactNumber: '9876543210',
-                contactEmail: 'contactemail@gmail.com',
-                registrationFee: '0 Rs',
-                registrationLink: 'googleform.link',
-                eventDescription: 'additional description about the events'
-            })">
-                <div class="feature-card">
-                    <span class="feature-hover-text">Drums5</span>
-                    <img src="https://i.ibb.co/jk8sKRtj/Whats-App-Image-2025-02-22-at-14-37-16-dbffedce.jpg" alt="Feature 6">
-                </div>
-                <div class="feature-details">
-                    <h3 class="feature-title">Drums5</h3>
-                    <p class="feature-author">on&nbsp;&nbsp;&nbsp;<strong>20th April</strong></p>
-                </div>
-            </div>                     
-    
         <!-- View More Link -->
         <div class="view-more">
-            <p>Check out all events&nbsp;&nbsp;<span class="arrow">→</span> 
-                <a href="events.html" class="view-events">View Events</a>
+            <p>
+              Check out all events&nbsp;&nbsp;<span class="arrow">→</span>
+              <a href="events.html" class="view-events" id="viewEventsLink">View Events</a>
             </p>
-        </div>
+          </div>          
     </section>    
 
-    <section class="heading-section" id="feature-workshop-section">
-        <h1>Recent Workshops <br> on coming Days.</h1>
-    </section>
-
-    <section class="feature-section">
-        <div class="feature-grid">
-            <!-- Feature Card 1 -->
-            <div class="feature-container">
-                <div class="feature-card">
-                    <span class="feature-hover-text">Special Event</span>
-                    <img src="https://i.ibb.co/Ld7T3BHX/Whats-App-Image-2025-02-22-at-14-26-39-594e19db.jpg" alt="Feature 1">
-                </div>
-                <div class="feature-details">
-                    <h3 class="feature-title">GPL'25</h3>
-                    <p class="feature-author">on&nbsp;&nbsp;&nbsp;<strong>24th February</strong></p>
-                </div>
-            </div>
-    
-            <!-- Feature Card 2 -->
-            <div class="feature-container">
-                <div class="feature-card">
-                    <span class="feature-hover-text">Cricket Tournament</span>
-                    <img src="https://i.ibb.co/YH0nZ0V/Whats-App-Image-2025-02-22-at-14-26-42-531a91a9.jpg" alt="Feature 2">
-                </div>
-                <div class="feature-details">
-                    <h3 class="feature-title">Cricket Tour</h3>
-                    <p class="feature-author">on&nbsp;&nbsp;&nbsp;<strong>28th February</strong></p>
-                </div>
-            </div>
-
-        <!-- Feature Card 3 -->
-        <div class="feature-container">
-            <div class="feature-card">
-                <span class="feature-hover-text">MATRIX 2.0</span>
-                <img src="https://i.ibb.co/KcZWBLBC/Whats-App-Image-2025-02-22-at-14-32-16-f5a98472.jpg" alt="Feature 3">
-            </div>
-            <div class="feature-details">
-                <h3 class="feature-title">MATRIX 2.0</h3>
-                <p class="feature-author">on&nbsp;&nbsp;&nbsp;<strong>24-25 January</strong></p>
-            </div>
-        </div>
-
-        <!-- Feature Card 4 -->
-        <div class="feature-container">
-            <div class="feature-card">
-                <span class="feature-hover-text">EDEN 3.0</span>
-                <img src="https://i.ibb.co/r2766zYb/Whats-App-Image-2025-02-22-at-14-37-16-29efee74.jpg" alt="Feature 4">
-            </div>
-            <div class="feature-details">
-                <h3 class="feature-title">EDEN 3.0</h3>
-                <p class="feature-author">on&nbsp;&nbsp;&nbsp;<strong>23rd May</strong></p>
-            </div>
-        </div>
-
-          <!-- Feature Card 5 -->
-          <div class="feature-container">
-            <div class="feature-card">
-                <span class="feature-hover-text">GUITAR</span>
-                <img src="https://i.ibb.co/Lzxxm29m/Whats-App-Image-2025-02-22-at-14-37-16-db243eed.jpg" alt="Feature 5">
-            </div>
-            <div class="feature-details">
-                <h3 class="feature-title">GUITAR</h3>
-                <p class="feature-author">on&nbsp;&nbsp;&nbsp;<strong>20th April</strong></p>
-            </div>
-        </div>
-
-          <!-- Feature Card 6 -->
-          <div class="feature-container">
-            <div class="feature-card">
-                <span class="feature-hover-text">Drums5</span>
-                <img src="https://i.ibb.co/jk8sKRtj/Whats-App-Image-2025-02-22-at-14-37-16-dbffedce.jpg" alt="Feature 6">
-            </div>
-            <div class="feature-details">
-                <h3 class="feature-title">Drums5</h3>
-                <p class="feature-author">on&nbsp;&nbsp;&nbsp;<strong>20th April</strong></p>
-            </div>
-        </div>
-
-        </div>
-        
+    <section class="hero2" id="workshop-events-section">
+        <p class="upcoming">upcoming</p>
+        <h1 class="title">WORKSHOPS</h1>
+      </section>
+      
+      <section class="feature-section">
+        <div class="feature-grid" id="workshop-grid"></div> <!-- For 6 workshops -->
+      
         <!-- View More Link -->
         <div class="view-more">
-            <p>Check out all events&nbsp;&nbsp;<span class="arrow">→</span> 
-                <a href="events.html" class="view-events">View Events</a>
-                <br><br><br><br><br>
-            </p>
+          <p>
+            Explore all workshops&nbsp;&nbsp;<span class="arrow">→</span> 
+            <a href="events.html?filter=Workshop" class="view-events" id="viewWorkshopLink">View Workshops</a>
+          </p>
         </div>
+      </section>
 
-    </section>
+      <section class="hero2" id="hackathon-events-section">
+        <p class="upcoming">Featured</p>
+        <h1 class="title">HACKATHONS</h1>
+      </section>
+      
+      <section class="feature-section">
+        <div class="feature-grid" id="hackathon-grid"></div> <!-- For 6 hackathons -->
+      
+        <!-- View More Link -->
+        <div class="view-more">
+          <p>Discover more hackathons&nbsp;&nbsp;<span class="arrow">→</span> 
+            <a href="events.html?filter=hackathon" class="view-events" id="viewHackathonLink">View Hackathons</a>
+          </p>
+        </div>
+      </section>
+      
+      
     <footer class="footer">
         <div class="footer-container">
             <div class="footer-logo">
@@ -364,21 +391,16 @@
                 <div class="footer-column">
                     <a href="#home-navbar">Home</a>
                     <a href="#feature-events-section">Events</a>
-                    <a href="#">Colleges</a>
+                    <a href="events.html">Explore</a>
                 </div>
                 <div class="footer-column">
-                    <a href="#">Tech Fest</a>
-                    <a href="#">Cultural Fest</a>
-                    <a href="#">sports</a>
+                    <a href="#workshop-events-section">Workshops</a>
+                    <a href="#hackathon-events-section">Hackathons</a>
                 </div>
                 <div class="footer-column">
-                    <a href="#">Workshops</a>
-                    <a href="#">Hackathons</a>
-                </div>
-                <div class="footer-column">
-                    <a href="#">FAQs</a>
-                    <a href="#">About Us</a>
-                    <a href="#">Contact Us</a>
+                    <a href="faq.html">FAQs</a>
+                    <a href="aboutUs.html">About Us</a>
+                    <a href="contact.html">Contact Us</a>
                 </div>
             </div>
         </div>
@@ -389,142 +411,123 @@
             <li><a href="#" class="static-btn">K.</a></li>
             <li><a href="#home-navbar"></i> Home</a></li>
             <li><a href="#feature-events-section"></i> Events</a></li>
-            <li><a href="#"> College</a></li>
-            <li><a href="#feature-workshop-section"> Workshops</a></li>
+            <li><a href="#workshop-events-section"> Workshops</a></li>
+            <li><a href="#hackathon-events-section">Hackathons</a></li>
             <li><a href="createevent.html" class="static-btn2">Create Event</a></li>
         </ul>
     </nav>    
-
-    <script>
-        let navTimeout;
-        const bottomNav = document.getElementById("bottomNav");
-
-        function hideNav() {
-            bottomNav.classList.add("hidden");
-        }
-
-        function showNav() {
-            bottomNav.classList.remove("hidden");
-            clearTimeout(navTimeout);
-            navTimeout = setTimeout(hideNav, 5000);
-        }
-
-        document.addEventListener("mousemove", showNav);
-        document.addEventListener("scroll", showNav);
-
-        const searchBtn = document.getElementById("search-box");
-        const exploreBtn = document.getElementById("explore-box");
-        const searchPopup = document.getElementById("searchPopup");
-        const closeSearchPopupBtn = document.getElementById("closePopup");
-        const searchPopupContent = document.querySelector(".search-popup-content");
-
-        searchBtn.addEventListener("click", (event) => {
-            event.stopPropagation();
-            searchPopup.classList.add("active");
-            document.body.style.overflow = "hidden";
-        });
-
-        exploreBtn.addEventListener("click", (event) => {
-            event.stopPropagation();
-            searchPopup.classList.add("active");
-            document.body.style.overflow = "hidden";
-        });
-
-        function closeSearchPopup() {
-            searchPopup.classList.remove("active");
-            document.body.style.overflow = "auto";
-        }
-
-        if (closeSearchPopupBtn) {
-            closeSearchPopupBtn.addEventListener("click", (event) => {
-                event.stopPropagation();
-                closeSearchPopup();
-            });
-        }
-
-        document.addEventListener("click", (event) => {
-            if (!searchPopupContent.contains(event.target) && searchPopup.classList.contains("active")) {
-                closeSearchPopup();
-            }
-        });
-
-        function openPopup(data) {
-            document.getElementById("popup-title").innerText = data.title;
-            document.getElementById("popup-image").src = data.imageUrl;
-            document.getElementById("popup-date").innerText = data.date;
-            document.getElementById("popup-description").innerText=data.description;
-            document.getElementById("popup-college-name").innerText = data.collegeName;
-            document.getElementById("popup-college-location").innerText = data.collegeLocation;
-            document.getElementById("popup-contact-number").innerText = data.contactNumber;
-            document.getElementById("popup-contact-email").innerText = data.contactEmail;
-            document.getElementById("popup-registration-fee").innerText = data.registrationFee;
-            document.getElementById("popup-registration-link").innerText = data.registrationLink;
-            document.getElementById("popup-event-description").innerText = data.eventDescription;
-            document.getElementById("popupOverlay").style.display = "flex";
-
-            document.getElementById('popupOverlay').classList.add('active');
-            document.body.style.overflow = "hidden";
-        }
-
-        function closeEventPopup() {
-            document.getElementById('popupOverlay').classList.remove('active');
-            document.getElementById("popupOverlay").style.display = "none";
-            document.body.style.overflow = "auto"; 
-        }
-
-        document.addEventListener("DOMContentLoaded", function () {
-    let isLoggedIn = localStorage.getItem("isLoggedIn");
-
-    let loginButton = document.querySelector(".auth-buttons a[href='login.html']");
-    let signupButton = document.querySelector(".auth-buttons a[href='signup.html']");
-    let profileIcon = document.getElementById("profileIcon");
-    let logoutButton = document.getElementById("logoutButton");
-
-    // ✅ Ensure elements exist before modifying them
-    if (!loginButton || !signupButton || !profileIcon || !logoutButton) {
-        console.error("One or more elements not found!");
-        return;
-    }
-
-    // ✅ Set default visibility
-    loginButton.style.display = "inline-block";
-    signupButton.style.display = "inline-block";
-    profileIcon.style.display = "none";
-    logoutButton.style.display = "none"; // Initially hidden
-
-    // ✅ Hide login/signup buttons and show profile & logout button if logged in
-    if (isLoggedIn === "true") {
-        console.log("User is logged in");  // ✅ Debugging
-        loginButton.style.display = "none";
-        signupButton.style.display = "none";
-        profileIcon.style.display = "block";
-        logoutButton.style.display = "inline-block"; // Show logout button
-    } else {
-        console.log("User is NOT logged in");  // ✅ Debugging
-    }
-
-    // ✅ Logout Functionality
-    logoutButton.addEventListener("click", function (event) {
-        event.preventDefault();
-        localStorage.removeItem("isLoggedIn"); // 🔹 Clear login status
-        window.location.href = "index.html"; // 🔹 Redirect to login page
-    });
-    document.addEventListener("DOMContentLoaded", function () {
-    let isLoggedIn = localStorage.getItem("isLoggedIn");
-    let createEventButton = document.getElementById("createEventLink");
-
-    if (isLoggedIn === "true") {
-        createEventButton.style.display = "block"; // ✅ Show button if logged in
-    } else {
-        createEventButton.style.display = "none"; // ❌ Hide button if not logged in
-    }
-});
-
-});
-
-    </script>
 </body>
 </html>
 
+<!--
+ <script>
+        let navTimeout;
+        const bottomNav = document.getElementById("bottomNav");
+        function hideNav() {
+            bottomNav.classList.add("hidden");
+        }
+        function showNav() {
+            bottomNav.classList.remove("hidden");
+            clearTimeout(navTimeout);
+            navTimeout = setTimeout(hideNav, 5000);
+        }
+        document.addEventListener("mousemove", showNav);
+        document.addEventListener("scroll", showNav);
+        const searchBtn = document.getElementById("search-box");
+        const exploreBtn = document.getElementById("explore-box");
+        const searchPopup = document.getElementById("searchPopup");
+        const closeSearchPopupBtn = document.getElementById("closePopup");
+        const searchPopupContent = document.querySelector(".search-popup-content");
+        searchBtn.addEventListener("click", (event) => {
+            event.stopPropagation();
+            searchPopup.classList.add("active");
+            document.body.style.overflow = "hidden";
+        });
+        exploreBtn.addEventListener("click", (event) => {
+            event.stopPropagation();
+            searchPopup.classList.add("active");
+            document.body.style.overflow = "hidden";
+        });
+        function closeSearchPopup() {
+            searchPopup.classList.remove("active");
+            document.body.style.overflow = "auto";
+        }
+        if (closeSearchPopupBtn) {
+            closeSearchPopupBtn.addEventListener("click", (event) => {
+                event.stopPropagation();
+                closeSearchPopup();
+            });
+        }
+        document.addEventListener("click", (event) => {
+            if (!searchPopupContent.contains(event.target) && searchPopup.classList.contains("active")) {
+                closeSearchPopup();
+            }
+        });
+        function openPopup(data) {
+            document.getElementById("popup-title").innerText = data.title;
+            document.getElementById("popup-image").src = data.imageUrl;
+            document.getElementById("popup-date").innerText = data.date;
+            document.getElementById("popup-description").innerText=data.description;
+            document.getElementById("popup-college-name").innerText = data.collegeName;
+            document.getElementById("popup-college-location").innerText = data.collegeLocation;
+            document.getElementById("popup-contact-number").innerText = data.contactNumber;
+            document.getElementById("popup-contact-email").innerText = data.contactEmail;
+            document.getElementById("popup-registration-fee").innerText = data.registrationFee;
+            document.getElementById("popup-registration-link").innerText = data.registrationLink;
+            document.getElementById("popup-event-description").innerText = data.eventDescription;
+            document.getElementById("popupOverlay").style.display = "flex";
+            document.getElementById('popupOverlay').classList.add('active');
+            document.body.style.overflow = "hidden";
+        }
+        function closeEventPopup() {
+            document.getElementById('popupOverlay').classList.remove('active');
+            document.getElementById("popupOverlay").style.display = "none";
+            document.body.style.overflow = "auto"; 
+        }
+        document.addEventListener("DOMContentLoaded", function () {
+    let isLoggedIn = localStorage.getItem("isLoggedIn");
+    let loginButton = document.querySelector(".auth-buttons a[href='login.html']");
+    let signupButton = document.querySelector(".auth-buttons a[href='signup.html']");
+    let profileIcon = document.getElementById("profileIcon");
+    let logoutButton = document.getElementById("logoutButton");
+    // ✅ Ensure elements exist before modifying them
+    if (!loginButton || !signupButton || !profileIcon || !logoutButton) {
+        console.error("One or more elements not found!");
+        return;
+    }
+    // ✅ Set default visibility
+    loginButton.style.display = "inline-block";
+    signupButton.style.display = "inline-block";
+    profileIcon.style.display = "none";
+    logoutButton.style.display = "none"; // Initially hidden
+    // ✅ Hide login/signup buttons and show profile & logout button if logged in
+    if (isLoggedIn === "true") {
+        console.log("User is logged in");  // ✅ Debugging
+        loginButton.style.display = "none";
+        signupButton.style.display = "none";
+        profileIcon.style.display = "block";
+        logoutButton.style.display = "inline-block"; // Show logout button
+    } else {
+        console.log("User is NOT logged in");  // ✅ Debugging
+    }
+    // ✅ Logout Functionality
+    logoutButton.addEventListener("click", function (event) {
+        event.preventDefault();
+        localStorage.removeItem("isLoggedIn"); // 🔹 Clear login status
+        window.location.href = "index.html"; // 🔹 Redirect to login page
+    });
+    document.addEventListener("DOMContentLoaded", function () {
+    let isLoggedIn = localStorage.getItem("isLoggedIn");
+    let createEventButton = document.getElementById("createEventLink");
+    if (isLoggedIn === "true") {
+        createEventButton.style.display = "block"; // ✅ Show button if logged in
+    } else {
+        createEventButton.style.display = "none"; // ❌ Hide button if not logged in
+    }
+});
+});
+    </script>
 
+git commit -m"the static images changed from the index page to real event cards, added hackathon section, connected events page to display filtered events from index page. styles changed, new pages faq, about us, contact, were added, which need modification, before login and after login conditions modified. pop up removed in index page.
+-->
 

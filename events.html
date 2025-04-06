@@ -34,6 +34,24 @@
         searchQuery: ""
     };
 
+    document.addEventListener("DOMContentLoaded", () => {
+        const urlParams = new URLSearchParams(window.location.search);
+        const filterType = urlParams.get("filter");
+
+        if (filterType) {
+            filters.eventType = filterType;
+
+            // ✅ Now the DOM is ready, so this will work
+            const eventTypeDropdown = document.querySelector("#eventType");
+            if (eventTypeDropdown) {
+                eventTypeDropdown.value = filterType;
+            }
+        }
+
+        loadEvents(); // Always call loadEvents after setting filter (if any)
+    });
+
+
     async function loadEvents() {
         const eventsContainer = document.querySelector(".feature-grid");
         eventsContainer.innerHTML = ""; 
@@ -203,9 +221,6 @@
                 if (e.target === popup) popup.remove();
             });
         }
-
-
-
 </script>
   
 
