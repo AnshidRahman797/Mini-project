@@ -233,14 +233,9 @@ def scrape_instagram(driver, usernames):
                 except Exception as e:
                     caption = "❌ Caption not found"
 
-                image_xpath = (
-                    "//article//img | "
-                    "//div[contains(@class, 'KL4Bh')]/img | "
-                    "//div[contains(@class, '_97aPb')]//img"
-                )
-                image_elements = driver.find_elements(By.XPATH, image_xpath)
-                for image_elem in image_elements:
-                    image_url = image_elem.get_attribute('src') if image_elem else "❌ Image not found"
+
+                image_elem= driver.find_elements(By.XPATH, "//article//img")
+                image_url = image_elem[0].get_attribute("src") if image_elem else "❌ Image not found"
                 
                 
                 if image_url != "❌ Image not found":
@@ -279,7 +274,7 @@ def scrape_instagram(driver, usernames):
             try:
                 batch = db.batch()
                 for i, post_data in enumerate(scraped_data):
-                    doc_ref = db.collection("instagramposts").document(f"{u_name}_post_{i}")
+                    doc_ref = db.collection("instagram_posts").document(f"{u_name}_post_{i}")
                     batch.set(doc_ref, post_data)
 
                 batch.commit()
