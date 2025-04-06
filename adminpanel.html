@@ -189,6 +189,19 @@
         popup.remove();
       });
       document.body.appendChild(popup);
+      // Close popup on outside click
+setTimeout(() => {
+  document.addEventListener("click", handleOutsideClick);
+});
+
+function handleOutsideClick(e) {
+  const popupContent = popup.querySelector(".popup-content");
+  if (!popupContent.contains(e.target)) {
+    popup.remove();
+    document.removeEventListener("click", handleOutsideClick);
+  }
+}
+
       document.querySelector(".approve-btn").addEventListener("click", async function () {
         try {
           await setDoc(doc(db, "verified_events", eventId), eventData);

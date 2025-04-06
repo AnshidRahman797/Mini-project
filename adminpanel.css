@@ -303,5 +303,17 @@ body {
   .dropdown-item:hover {
     background-color: #f7f7f7;
   }
+  .feature-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* or use 'contain' based on your layout */
+    border-radius: 8px; /* optional: for cleaner look */
+  }
+  .image-wrapper {
+    width: 100%;
+    height: 250px; /* or however tall you want the cards */
+    overflow: hidden;
+    position: relative;
+  }
   
   
