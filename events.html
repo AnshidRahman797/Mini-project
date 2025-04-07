@@ -198,13 +198,13 @@
                     <div class="popup-right">
                         <h2>${event.event_name}</h2>
                         <p><strong>Location:</strong> ${event.college}, ${event.city}, ${event.state}</p>
+                        <p><strong>Caption:</strong> ${event.event_caption}</p>
                         <p><strong>Start Date:</strong> ${event.start_date}</p>
-                        <p><strong>Contact:</strong> ${event.contact_number}</p>
-                        <p><strong>Email:</strong> ${event.contact_email}</p>
                         <p><strong>Event Type:</strong> ${event.event_type}</p>
                         <p><strong>Event Fee:</strong> ${event.event_fee || "Free"}</p>
+                        <p><strong>Contact:</strong> ${event.contact_number}</p>
+                        <p><strong>Email:</strong> ${event.contact_email}</p>
                         <p><strong>Description:</strong> ${event.event_description}</p>
-                        <p><strong>Caption:</strong> ${event.event_caption}</p>
                     </div>
                 </div>
             `;
@@ -277,6 +277,28 @@
             
         </div>
     </div>
+
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-logo">
+                <span>K.</span>
+            </div>
+            <div class="footer-links">
+                <div class="footer-column" id="adminLinkContainer" style="display:none">
+                    <a href="adminpanel.html">Admin Panel</a>
+                </div>
+                <div class="footer-column">
+                    <a href="index.html">Home</a>
+                    <a href="events.html">Events</a>
+                </div>
+                <div class="footer-column">
+                    <a href="faq.html">FAQs</a>
+                    <a href="aboutUs.html">About Us</a>
+                    <a href="contact.html">Contact Us</a>
+                </div>
+            </div>
+        </div>
+    </footer> 
 
     <script>
         const statesAndCities = {

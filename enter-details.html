@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <title>Event Registration Form</title>
   <style>
     body {
@@ -92,13 +93,14 @@
 </head>
 <body>
   <div class="form-container">
-    <h2>Enter the Details</h2>
+    <a href="adminpanel.html" style="position: relative; font-weight: bold; top: 10px; right: 10px; text-decoration: none; font-size: 20px; color: rgb(0, 0, 0);">
+      <i class="fas fa-arrow-left" style="margin-right: 5px;"></i></a>
+        <h2>Enter the Details</h2>
     <form id="eventForm" method="POST" action="/submit_verified_event" novalidate>
       <div class="image-preview">
         <img id="previewImg" src="" alt="Event Image" style="display: none; margin-bottom: 10px;" />
         <p id="scrapedCaption" style="font-style: italic;"></p>
       </div>
-
       <div class="form-row">
         <div class="form-group">
           <label>Event Name: *</label>
