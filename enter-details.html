@@ -91,16 +91,11 @@
   </style>
 </head>
 <body>
-
   <div class="form-container">
-    <a href="adminpanel.html" style="position: relative; font-weight: bold; top: 10px; right: 10px; text-decoration: none; font-size: 20px;">K.</a>
-
     <h2>Enter the Details</h2>
     <form id="eventForm" method="POST" action="/submit_verified_event" novalidate>
-      
       <div class="image-preview">
-        
-        <img id="previewImage" src="" alt="Event Image" style="display: none; margin-bottom: 10px;" />
+        <img id="previewImg" src="" alt="Event Image" style="display: none; margin-bottom: 10px;" />
         <p id="scrapedCaption" style="font-style: italic;"></p>
       </div>
 
@@ -202,21 +197,59 @@
 
   <script>
     // Assuming scraped data is passed via query params: ?image_url=...&caption=...
-    const urlParams = new URLSearchParams(window.location.search);
-    const imageUrl = urlParams.get("image_url");
-    const captionText = urlParams.get("caption");
-
-    const previewImg = document.getElementById("previewImage");
-    const captionPara = document.getElementById("scrapedCaption");
-
-    if (imageUrl) {
-      previewImg.src = imageUrl;
-      previewImg.style.display = "block";
-    }
-
-    if (captionText) {
-      captionPara.textContent = captionText;
-    }
+    window.addEventListener("load", () => {
+      const eventData = JSON.parse(sessionStorage.getItem("eventData"));
+      if (eventData) {
+        var previewImg = document.getElementById("previewImg");
+        const captionPara = document.getElementById("scrapedCaption");
+        if (previewImg) {
+  // Safe to manipulate previewImg
+        } else {
+          console.error("Element with ID 'previewImg' not found.");
+        }  
+    
+    // Set image source (you might need to prepend the MIME type if it's not included)
+        previewImg.src = `data:image/jpeg;base64,${eventData.image_base64}`;
+        previewImg.style.display = "block";
+    
+    // Set caption text
+        captionPara.textContent = eventData.caption;
+      }
+    });
+    document.getElementById("eventForm").addEventListener("submit", async function(e) {
+            e.preventDefault();
+            // Create a FormData object to extract form values
+            const formData = new FormData(this);
+            // If you already have image URL (base64), you can append it:
+            const base64Data = previewImg.src.split(',')[1];
+  
+            formData.append("event_image_base64", base64Data);
+          
+      
+            // Convert form data to a plain object
+            const data = {};
+            formData.forEach((value, key) => data[key] = value);
+      
+            try {
+              const response = await fetch("http://127.0.0.1:5000/submit_verified_event", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(data)
+              });
+              const result = await response.json();
+              if (response.ok) {
+                // Display success message (or redirect)
+                alert("Event registered successfully!");
+                // Optionally, redirect to another page:
+                // window.location.href = "some_page.html";
+              } else {
+                alert("Error: " + result.error);
+              }
+            } catch (error) {
+              console.error("Submission error:", error);
+              alert("An error occurred while submitting the event.");
+            }
+          });
 
     document.getElementById("eventForm").addEventListener("submit", function (e) {
       let valid = true;
@@ -403,11 +436,7 @@
                 collegeSelect.add(option);
             });
         });
-        </script>
-        
-        
+        </script>        
   </body>
-  
-  
-</body>
+
 </html>
