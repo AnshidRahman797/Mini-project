@@ -329,7 +329,7 @@
             <i class="fas fa-user-circle"></i>
         </div>
             <a href="createevent.html" id="createEventLink">
-                <button class="btn-pro">Create Event</button>
+                <button class="btn-pro">Submit Event</button>
             </a>
         </div>  
     </header>
@@ -446,9 +446,40 @@
             <li><a href="#feature-events-section"></i> Events</a></li>
             <li><a href="#workshop-events-section"> Workshops</a></li>
             <li><a href="#hackathon-events-section">Hackathons</a></li>
-            <li><a href="createevent.html" class="static-btn2">Create Event</a></li>
+            <li><a href="createevent.html" class="static-btn2">Submit Event</a></li>
         </ul>
     </nav>
+
+    <script>
+      const bottomNav = document.getElementById("bottomNav");
+      let inactivityTimeout;
+  
+      function hideBottomNav() {
+          bottomNav.style.opacity = "0";
+          bottomNav.style.pointerEvents = "none";
+      }
+  
+      function showBottomNav() {
+          bottomNav.style.opacity = "1";
+          bottomNav.style.pointerEvents = "auto";
+      }
+  
+      function resetInactivityTimer() {
+          showBottomNav();
+          clearTimeout(inactivityTimeout);
+          inactivityTimeout = setTimeout(hideBottomNav, 5000);
+      }
+  
+      // Monitor user activity
+      document.addEventListener("mousemove", resetInactivityTimer);
+      document.addEventListener("touchstart", resetInactivityTimer);
+      document.addEventListener("scroll", resetInactivityTimer);
+  
+      // Initialize the timer
+      resetInactivityTimer();
+  </script>
+  
+
 </body>
 
 </html>
