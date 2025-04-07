@@ -79,11 +79,10 @@ body {
     margin: 0 10px;
     font-size: 16px;
 }
-.profile-icon {
-    margin-right: 70px;
-    font-size: 20px;
-    cursor: pointer;
-    color: black;
+
+.profile-icon i {
+    margin-top: 4px;
+    font-size: 30px; /* Adjust the size as needed */
 }
 
 .btn-pro {

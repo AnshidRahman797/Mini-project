@@ -47,8 +47,6 @@
                 eventTypeDropdown.value = filterType;
             }
         }
-
-        loadEvents(); // Always call loadEvents after setting filter (if any)
     });
 
 
@@ -246,6 +244,7 @@
         <div class="filters">
             <select id="eventType" class="dropdown-menu">
                 <option value="" disabled selected hidden>Event Type</option>
+                <option value="">Event Type</option>
                 <option value="Techfest">Tech Fest</option>
                 <option value="Workshop">Workshop</option>
                 <option value="Hackathon">Hackathon</option>
@@ -254,24 +253,17 @@
             
             <select id="state" class="dropdown-menu">
                 <option value="" disabled selected hidden>State</option>
-                <option value="Andhra Pradesh">Andhra Pradesh</option>
-                <option value="Karnataka">Karnataka</option>
-                <option value="Tamil Nadu">Tamil Nadu</option>
-                <option value="Kerala">Kerala</option>
-                <option value="Maharashtra">Maharashtra</option>
-                <option value="Punjab">Punjab</option>
+                <option value="">State</option>
             </select>
             
             <select id="city" class="dropdown-menu">
                 <option value="" disabled selected hidden>City</option>
-                <option value="Palakkad">Palakkad</option>
-                <option value="Kochi">Kochi</option>
+                <option value="">City</option>
             </select>
             
             <select id="college" class="dropdown-menu">
                 <option value="" disabled selected hidden>College</option>
-                <option value="Government Engineering College, Sreekrishnapuram">GEC Palakkad</option>
-                <option value="NSS College of Engineering">NSS Palakkad</option>
+                <option value="">College</option>
             </select>
             
             <input type="date" id="date" class="dropdown-menu">
@@ -286,6 +278,96 @@
         </div>
     </div>
 
+    <script>
+        const statesAndCities = {
+            "Andhra Pradesh": {
+                "Visakhapatnam": ["Andhra University", "GITAM University", "Gayatri Vidya Parishad", "Raghu Engineering College", "ANITS"],
+                "Vijayawada": ["PVP Siddhartha College", "VR Siddhartha Engineering College", "SRK Institute", "Nalanda Degree College", "KBN College"],
+                "Guntur": ["Acharya Nagarjuna University", "RVR & JC College", "Hindu College", "Vignan University", "TJPS College"],
+                "Tirupati": ["Sri Venkateswara University", "SVCE", "SV Arts College", "Rashtriya Sanskrit Vidyapeetha", "Sree Vidyanikethan"],
+                "Kurnool": ["Rayalaseema University", "Osmania College", "St. Joseph’s College", "KVR College", "Silver Jubilee College"]
+            },
+            "Karnataka": {
+                "Bangalore": ["IISc Bangalore", "RV College of Engineering", "BMS College of Engineering", "Christ University", "Presidency College"],
+                "Mysore": ["SJCE Mysore", "Vidyavardhaka College", "JSS Science & Technology", "Mysore Medical College", "Mahajana College"],
+                "Hubli": ["BVBCET", "KLE Technological University", "SDM College", "KIMS Hubli", "Deshpande Startups"],
+                "Mangalore": ["NITTE University", "St. Aloysius College", "Yenepoya University", "MIT Manipal", "AJ Institute of Engineering"],
+                "Belgaum": ["KLE University", "VTU Belgaum", "Gogte Institute of Technology", "BIMS", "Angadi Institute of Technology"]
+            },
+            "Tamil Nadu": {
+                "Chennai": ["IIT Madras", "Anna University", "Loyola College", "Madras Christian College", "SRM University"],
+                "Coimbatore": ["PSG College of Technology", "Coimbatore Institute of Technology", "Karunya University", "Kumaraguru College", "Amrita University"],
+                "Madurai": ["Madurai Kamaraj University", "Thiagarajar College of Engineering", "American College", "Fatima College", "Lady Doak College"],
+                "Trichy": ["NIT Trichy", "Bishop Heber College", "Periyar EVR College", "SASTRA University", "Oxford Engineering College"],
+                "Salem": ["Vinayaka Missions University", "Sona College of Technology", "Government College of Engineering", "AVS Engineering College", "Knowledge Institute of Technology"]
+            },
+            "Kerala": {
+                "Thiruvananthapuram": ["University of Kerala", "College of Engineering Trivandrum", "LBS Institute of Technology", "Mar Ivanios College", "Government Medical College", "All Saints' College, Thiruvananthapuram","Government College for Women, Thiruvananthapuram","Loyola College of Social Sciences, Thiruvananthapuram","College of Fine Arts, Thiruvananthapuram","Sree Chitra Thirunal College of Engineering, Thiruvananthapuram","Government Law College, Thiruvananthapuram"],
+                "Palakkad" :["Government Engineering College, Sreekrishnapuram","Government Victoria College","NSS College of Engineering","Mercy College, Palakkad","Chembai Memorial Government Music College","MES College of Engineering, Kuttippuram","Vidya Academy of Science and Technology","Vidya Academy of Science and Technology","Yuvakshetra Institute of Management Studies","Sree Neelakanta Government Sanskrit College"],
+                "Kochi": ["CUSAT", "SCMS School of Engineering", "Rajagiri College", "St. Teresa's College", "Sacred Heart College","Government Law College, Ernakulam","Amrita Institute of Medical Sciences","Model Engineering College","Federal Institute of Science and Technology (FISAT)","Toc H Institute of Science and Technology"],
+                "Idukki" :["Mar Baselios Christian College of Engineering and Technology","Government College, Kattappana","Government Engineering College, Painav, Idukki","College of Engineering, Munnar","Government Polytechnic College, Nedumkandam","Marian College, Kuttikanam","St. Thomas College, Thodupuzha","Al-Azhar College of Arts and Science","Government College, Munnar","St. Joseph's College, Moolamattom","Jawaharlal Nehru Institute of Arts and Science"],
+                "Malappuram" : ["MES Keveeyam College, Valanchery","PSMO College, Tirurangadi","Government College, Malappuram","MEA Engineering College","MEA Engineering College","Aligarh Muslim University (AMU) Centre, Malappuram","Aligarh Muslim University (AMU) Centre, Malappuram","Government Medical College, Manjeri","EMEA College of Arts and Science","MES Medical College, Perinthalmanna"],
+                "Kottayam" :["Rajiv Gandhi Institute of Technology (RIT)","CMS College, Kottayam","Baselius College, Kottayam","Baselius College, Kottayam","Alphonsa College, Pala","Alphonsa College, Pala","Assumption College, Changanacherry","B.C.M. College for Women, Kottayam","Bishop Kurialacherry College for Women, Amalagiri","Bishop Vayalil Memorial Holy Cross College, Cherpunkal","Amal Jyothi College of Engineering, Kanjirapally","College of Applied Science (IHRD), Njeezhoor"],
+                "Alappuzha" :["Sanatana Dharma College, Alappuzha","St. Joseph's College for Women, Alappuzha","T.D. Medical College, Alappuzha","College of Engineering, Chengannur","College of Engineering, Cherthala","Bishop Moore College, Mavelikara","MSM College, Kayamkulam","KVM College of Nursing, Cherthala","College of Applied Science, Mavelikara","KVM College of Arts and Science, Cherthala"],
+                "Pathanamthitta" :["Catholicate College, Pathanamthitta","Mar Athanasius College, Pathanamthitta","St. Thomas College, Kozhencherry","Mount Zion College of Engineering, Pathanamthitta","Believers Church Medical College, Thiruvalla","Pushpagiri Institute of Medical Sciences and Research Centre, Thiruvalla","Mar Chrysostom College of Education, Pathanamthitta","Mannam Ayurveda Co-operative Medical College, Pandalam","Sree Buddha College of Engineering, Pattoor","KVVS Institute of Technology, Adoor"],
+                "Kozhikode": ["Government Medical College, Kozhikode", "IIM Kozhikode", "NIT Calicut", "Farook College", "Providence Women's College", "Zamorin’s Guruvayurappan College","Devagiri College","Government Engineering College, Kozhikode","Malabar Christian College","KMCT College of Engineering","AWH Engineering College","Markaz Arts and Science College"],
+                "Wayanad" :["Government Engineering College, Wayanad","WMO Arts and Science College, Muttil","Mary Matha Arts & Science College, Mananthavady","Don Bosco College, Sulthan Bathery","Pazhassi Raja College, Pulpally","Oriental College of Hotel Management","College of Veterinary and Animal Sciences, Pookode","Indira Gandhi College of Arts & Science","St. Mary's College, Sulthan Bathery","Jawaharlal Nehru College, Panamaram"],
+                "Kannur" :["Government Engineering College, Kannur","Kannur University","Government Brennen College, Thalassery","Sir Syed College, Taliparamba","College of Engineering, Thalassery","Don Bosco Arts and Science College","Government Medical College, Pariyaram","Chinmaya Institute of Technology","Sree Narayana College, Kannur","College of Applied Science, Pattuvam"],
+                "Thrissur": ["Government Engineering College Thrissur", "Kerala Agricultural University", "Sahrdaya College of Engineering", "St. Thomas College", "Christ College","Amala Institute of Medical Sciences","Government Medical College, Thrissur","Government Medical College, Thrissur","Sree Kerala Varma College","IES College of Engineering"],
+                "Kasaragod" :["Central University of Kerala","Government College, Kasaragod","Malik Deenar College of Pharmacy","Government Polytechnic College, Kasaragod","College of Engineering, Trikaripur","Nehru Arts and Science College","LBS College of Engineering","Sullamussalam Science College","Malik Deenar Institute of Management Studies","Kasaragod Institute of Technology"],
+                "Kollam": ["TKM College of Engineering", "MES Institute of Technology", "Amrita Vishwa Vidyapeetham", "Sree Narayana College", "Younus College of Engineering","Fatima Mata National College, Kollam","Bishop Jerome Institute, Kollam","Travancore Medical College, Kollam","Kumbalathu Sankupilla Memorial Devaswom Board College","College of Teacher Education, Arkannoor, Ayur","College of Engineering, Perumon","Sree Narayana Institute of Medical Sciences, Kollam"]
+            },
+            "Maharashtra": {
+                "Mumbai": ["IIT Bombay", "University of Mumbai", "St. Xavier's College", "VJTI", "NMIMS"],
+                "Pune": ["Savitribai Phule Pune University", "College of Engineering Pune", "Fergusson College", "MIT Pune", "Bharati Vidyapeeth University"],
+                "Nagpur": ["VNIT Nagpur", "Nagpur University", "YCCE", "LIT Nagpur", "GHRCE"],
+                "Nashik": ["K. K. Wagh Institute of Engineering", "Sandip University", "Nashik District Maratha Vidya Prasarak Samaj", "Yashwantrao Chavan Maharashtra Open University", "MET Bhujbal Knowledge City"],
+                "Aurangabad": ["Dr. Babasaheb Ambedkar Marathwada University", "MIT Aurangabad", "Government College of Engineering Aurangabad", "Deogiri College", "MGM University"]
+            },
+            "Punjab": {
+                "Chandigarh": ["Panjab University", "PEC Chandigarh", "Chandigarh University", "DAV College", "GGDSD College"],
+                "Ludhiana": ["Punjab Agricultural University", "Guru Nanak Dev Engineering College", "SCD Government College", "Christian Medical College", "Bhai Gurdas Group of Institutions"],
+                "Amritsar": ["Guru Nanak Dev University", "BBK DAV College for Women", "Khalsa College Amritsar", "DAV College", "Global Institute Amritsar"],
+                "Jalandhar": ["Lovely Professional University", "DAV University", "Guru Nanak Dev Engineering College", "Doaba College", "St. Soldier Group of Institutions"],
+                "Patiala": ["Thapar Institute of Engineering & Technology", "Punjabi University", "Govt. Mohindra College", "Gian Sagar Medical College", "Multani Mal Modi College"]
+            }
+        };
+    
+        const stateSelect = document.getElementById("state");
+        const citySelect = document.getElementById("city");
+        const collegeSelect = document.getElementById("college");
+    
+        // Populate States
+        Object.keys(statesAndCities).forEach(state => {
+            const option = new Option(state, state);
+            stateSelect.add(option);
+        });
+    
+        // On State Change → Populate Cities
+        stateSelect.addEventListener("change", function () {
+            citySelect.innerHTML = "<option value='' disabled selected hidden>City</option>";
+            collegeSelect.innerHTML = "<option value='' disabled selected hidden>College</option>";
+    
+            const cities = statesAndCities[this.value] || {};
+            Object.keys(cities).forEach(city => {
+                const option = new Option(city, city);
+                citySelect.add(option);
+            });
+        });
+    
+        // On City Change → Populate Colleges
+        citySelect.addEventListener("change", function () {
+            collegeSelect.innerHTML = "<option value='' disabled selected hidden>College</option>";
+    
+            const selectedState = stateSelect.value;
+            const colleges = statesAndCities[selectedState]?.[this.value] || [];
+    
+            colleges.forEach(college => {
+                const option = new Option(college, college);
+                collegeSelect.add(option);
+            });
+        });
+    </script>
     
 </body>
 </html>

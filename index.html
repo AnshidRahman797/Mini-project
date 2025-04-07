@@ -11,11 +11,15 @@
 <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js"></script>
 
-<!-- Firebase App (core SDK) -->
-<script src="https://www.gstatic.com/firebasejs/9.6.11/firebase-app-compat.js"></script>
+<!-- Firebase App (the core Firebase SDK) -->
+<script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
 
-<!-- Firestore SDK -->
-<script src="https://www.gstatic.com/firebasejs/9.6.11/firebase-firestore-compat.js"></script>
+<!-- Firebase Auth -->
+<script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
+
+<!-- Firebase Firestore -->
+<script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore-compat.js"></script>
+
 
 <script>
     // Your Firebase config
@@ -210,7 +214,6 @@
     document.addEventListener("DOMContentLoaded", loadRandomEvent);
 
     document.addEventListener("DOMContentLoaded", function () {
-        let isLoggedIn = localStorage.getItem("isLoggedIn");
         let loginButton = document.querySelector(".auth-buttons a[href='login.html']");
         let signupButton = document.querySelector(".auth-buttons a[href='signup.html']");
         let profileIcon = document.getElementById("profileIcon");
@@ -236,7 +239,8 @@
         logoutButton.style.display = "none";
 
         // ✅ Login logic
-        if (isLoggedIn === "true") {
+        firebase.auth().onAuthStateChanged(function(user) {
+          if (user) {
             console.log("User is logged in");
             loginButton.style.display = "none";
             signupButton.style.display = "none";
@@ -259,14 +263,40 @@
             searchbox.href = "signup.html";
             createEventLink.style.display = "block";    // Show button anyway, but as login
         }
-
-        // ✅ Logout logic
-        logoutButton.addEventListener("click", function (event) {
-            event.preventDefault();
-            localStorage.removeItem("isLoggedIn");
-            window.location.href = "index.html";
+      });
+      logoutButton.addEventListener("click", function (event) {
+        event.preventDefault();
+        firebase.auth().signOut().then(() => {
+          window.location.href = "index.html";
+        }).catch((error) => {
+          console.error("Error signing out:", error);
         });
+      });
     });
+
+    firebase.auth().onAuthStateChanged(async (user) => {
+    if (user) {
+        console.log("User is logged in");
+
+        try {
+            const tokenResult = await user.getIdTokenResult();
+            console.log("Token claims:", tokenResult.claims);
+
+            if (tokenResult.claims.admin) {
+                console.log("Admin detected: revealing admin link.");
+                document.getElementById("adminLinkContainer").style.display = "block";
+            } else {
+                document.getElementById("adminLinkContainer").style.display = "none";
+            }
+        } catch (error) {
+            console.error("Error getting token claims:", error);
+        }
+
+    } else {
+        console.log("User is NOT logged in");
+        document.getElementById("adminLinkContainer").style.display = "none";
+    }
+});
 
 
   </script>
@@ -299,7 +329,7 @@
             <i class="fas fa-user-circle"></i>
         </div>
             <a href="createevent.html" id="createEventLink">
-                <button class="btn-pro">Create Event</button>
+                <button class="btn-pro">Submit Event</button>
             </a>
         </div>  
     </header>
@@ -388,6 +418,9 @@
                 <span>K.</span>
             </div>
             <div class="footer-links">
+                <div class="footer-column" id="adminLinkContainer" style="display:none">
+                    <a href="adminpanel.html">Admin Panel</a>
+                </div>
                 <div class="footer-column">
                     <a href="#home-navbar">Home</a>
                     <a href="#feature-events-section">Events</a>
@@ -413,121 +446,41 @@
             <li><a href="#feature-events-section"></i> Events</a></li>
             <li><a href="#workshop-events-section"> Workshops</a></li>
             <li><a href="#hackathon-events-section">Hackathons</a></li>
-            <li><a href="createevent.html" class="static-btn2">Create Event</a></li>
+            <li><a href="createevent.html" class="static-btn2">Submit Event</a></li>
         </ul>
-    </nav>    
+    </nav>
+
+    <script>
+      const bottomNav = document.getElementById("bottomNav");
+      let inactivityTimeout;
+  
+      function hideBottomNav() {
+          bottomNav.style.opacity = "0";
+          bottomNav.style.pointerEvents = "none";
+      }
+  
+      function showBottomNav() {
+          bottomNav.style.opacity = "1";
+          bottomNav.style.pointerEvents = "auto";
+      }
+  
+      function resetInactivityTimer() {
+          showBottomNav();
+          clearTimeout(inactivityTimeout);
+          inactivityTimeout = setTimeout(hideBottomNav, 5000);
+      }
+  
+      // Monitor user activity
+      document.addEventListener("mousemove", resetInactivityTimer);
+      document.addEventListener("touchstart", resetInactivityTimer);
+      document.addEventListener("scroll", resetInactivityTimer);
+  
+      // Initialize the timer
+      resetInactivityTimer();
+  </script>
+  
+
 </body>
+
 </html>
-
-<!--
- <script>
-        let navTimeout;
-        const bottomNav = document.getElementById("bottomNav");
-        function hideNav() {
-            bottomNav.classList.add("hidden");
-        }
-        function showNav() {
-            bottomNav.classList.remove("hidden");
-            clearTimeout(navTimeout);
-            navTimeout = setTimeout(hideNav, 5000);
-        }
-        document.addEventListener("mousemove", showNav);
-        document.addEventListener("scroll", showNav);
-        const searchBtn = document.getElementById("search-box");
-        const exploreBtn = document.getElementById("explore-box");
-        const searchPopup = document.getElementById("searchPopup");
-        const closeSearchPopupBtn = document.getElementById("closePopup");
-        const searchPopupContent = document.querySelector(".search-popup-content");
-        searchBtn.addEventListener("click", (event) => {
-            event.stopPropagation();
-            searchPopup.classList.add("active");
-            document.body.style.overflow = "hidden";
-        });
-        exploreBtn.addEventListener("click", (event) => {
-            event.stopPropagation();
-            searchPopup.classList.add("active");
-            document.body.style.overflow = "hidden";
-        });
-        function closeSearchPopup() {
-            searchPopup.classList.remove("active");
-            document.body.style.overflow = "auto";
-        }
-        if (closeSearchPopupBtn) {
-            closeSearchPopupBtn.addEventListener("click", (event) => {
-                event.stopPropagation();
-                closeSearchPopup();
-            });
-        }
-        document.addEventListener("click", (event) => {
-            if (!searchPopupContent.contains(event.target) && searchPopup.classList.contains("active")) {
-                closeSearchPopup();
-            }
-        });
-        function openPopup(data) {
-            document.getElementById("popup-title").innerText = data.title;
-            document.getElementById("popup-image").src = data.imageUrl;
-            document.getElementById("popup-date").innerText = data.date;
-            document.getElementById("popup-description").innerText=data.description;
-            document.getElementById("popup-college-name").innerText = data.collegeName;
-            document.getElementById("popup-college-location").innerText = data.collegeLocation;
-            document.getElementById("popup-contact-number").innerText = data.contactNumber;
-            document.getElementById("popup-contact-email").innerText = data.contactEmail;
-            document.getElementById("popup-registration-fee").innerText = data.registrationFee;
-            document.getElementById("popup-registration-link").innerText = data.registrationLink;
-            document.getElementById("popup-event-description").innerText = data.eventDescription;
-            document.getElementById("popupOverlay").style.display = "flex";
-            document.getElementById('popupOverlay').classList.add('active');
-            document.body.style.overflow = "hidden";
-        }
-        function closeEventPopup() {
-            document.getElementById('popupOverlay').classList.remove('active');
-            document.getElementById("popupOverlay").style.display = "none";
-            document.body.style.overflow = "auto"; 
-        }
-        document.addEventListener("DOMContentLoaded", function () {
-    let isLoggedIn = localStorage.getItem("isLoggedIn");
-    let loginButton = document.querySelector(".auth-buttons a[href='login.html']");
-    let signupButton = document.querySelector(".auth-buttons a[href='signup.html']");
-    let profileIcon = document.getElementById("profileIcon");
-    let logoutButton = document.getElementById("logoutButton");
-    // ✅ Ensure elements exist before modifying them
-    if (!loginButton || !signupButton || !profileIcon || !logoutButton) {
-        console.error("One or more elements not found!");
-        return;
-    }
-    // ✅ Set default visibility
-    loginButton.style.display = "inline-block";
-    signupButton.style.display = "inline-block";
-    profileIcon.style.display = "none";
-    logoutButton.style.display = "none"; // Initially hidden
-    // ✅ Hide login/signup buttons and show profile & logout button if logged in
-    if (isLoggedIn === "true") {
-        console.log("User is logged in");  // ✅ Debugging
-        loginButton.style.display = "none";
-        signupButton.style.display = "none";
-        profileIcon.style.display = "block";
-        logoutButton.style.display = "inline-block"; // Show logout button
-    } else {
-        console.log("User is NOT logged in");  // ✅ Debugging
-    }
-    // ✅ Logout Functionality
-    logoutButton.addEventListener("click", function (event) {
-        event.preventDefault();
-        localStorage.removeItem("isLoggedIn"); // 🔹 Clear login status
-        window.location.href = "index.html"; // 🔹 Redirect to login page
-    });
-    document.addEventListener("DOMContentLoaded", function () {
-    let isLoggedIn = localStorage.getItem("isLoggedIn");
-    let createEventButton = document.getElementById("createEventLink");
-    if (isLoggedIn === "true") {
-        createEventButton.style.display = "block"; // ✅ Show button if logged in
-    } else {
-        createEventButton.style.display = "none"; // ❌ Hide button if not logged in
-    }
-});
-});
-    </script>
-
-git commit -m"the static images changed from the index page to real event cards, added hackathon section, connected events page to display filtered events from index page. styles changed, new pages faq, about us, contact, were added, which need modification, before login and after login conditions modified. pop up removed in index page.
--->
 
